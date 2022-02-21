@@ -1,12 +1,8 @@
 global:
   enabled: false
-  tls:
-    enabled: true
-    enableAutoEncrypt: true
-externalServers:
-  enabled: true
-  hosts:
-    - 'consul.service.consul'
+  gossipEncryption:
+    secretName: consul-gossip-secret
+    secretKey: key
 
 client:
   enabled: true
@@ -14,4 +10,12 @@ client:
   # IPs. If false, the pod IPs must be routable from the external servers.
   exposeGossipPorts: true
   join:
-    - 'consul.service.consul'
+    - 192.168.11.10
+    - 192.168.11.11
+    - 192.168.11.12
+
+connectInject:
+  enabled: true
+
+controller:
+  enabled: true
