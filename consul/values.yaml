@@ -1,0 +1,17 @@
+global:
+  enabled: false
+  tls:
+    enabled: true
+    enableAutoEncrypt: true
+externalServers:
+  enabled: true
+  hosts:
+    - 'consul.service.consul'
+
+client:
+  enabled: true
+  # Set this to true to expose the Consul clients using the Kubernetes node
+  # IPs. If false, the pod IPs must be routable from the external servers.
+  exposeGossipPorts: true
+  join:
+    - 'consul.service.consul'
