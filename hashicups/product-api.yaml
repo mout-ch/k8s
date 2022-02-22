@@ -1,6 +1,4 @@
 ---
-# Service to expose web frontend
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,15 +11,19 @@ spec:
       protocol: TCP
       port: 9090
       targetPort: 9090
-
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: product-api
 automountServiceAccountToken: true
-
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: product-api
+spec:
+  protocol: "http"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -34,10 +36,7 @@ data:
       "bind_address": ":9090",
       "metrics_address": ":9103"
     }
-
 ---
-# Web frontend
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,10 +53,9 @@ spec:
       labels:
         app: product-api
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9102"
         consul.hashicorp.com/connect-inject: "true"
         consul.hashicorp.com/connect-service-upstreams: "postgres:5432"
+        consul.hashicorp.com/enable-metrics-merging: "false"
     spec:
       serviceAccountName: product-api
       volumes:
@@ -69,7 +67,7 @@ spec:
             path: conf.json
       containers:
         - name: product-api
-          image: hashicorpdemoapp/product-api:v0.0.17
+          image: hashicorpdemoapp/product-api:v0.0.16
           ports:
             - containerPort: 9090
             - containerPort: 9103

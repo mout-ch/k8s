@@ -1,4 +1,4 @@
-namePrefix: kustomize-
+namePrefix: hashicups-
 
 resources:
 - frontend.yaml
