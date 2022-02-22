@@ -1,18 +1,38 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: consul
+  namespace: consul
 spec:
-  destination:
-    name: ''
-    namespace: consul
-    server: 'https://kubernetes.default.svc'
-  source:
-    path: ''
-    repoURL: 'https://helm.releases.hashicorp.com'
-    targetRevision: 0.40.0
-    chart: consul
-    helm:
-      valueFiles:
-        - values.yaml
   project: default
+  source:
+    repoURL: https://helm.releases.hashicorp.com
+    chart: consul
+    targetRevision: 1.11.2
+    helm:
+      values: |
+        global:
+          enabled: false
+          gossipEncryption:
+            secretName: consul-gossip-secret
+            secretKey: key
+
+        client:
+          enabled: true
+          # Set this to true to expose the Consul clients using the Kubernetes node
+          # IPs. If false, the pod IPs must be routable from the external servers.
+          exposeGossipPorts: true
+          join:
+            - 192.168.11.10
+            - 192.168.11.11
+            - 192.168.11.12
+
+        connectInject:
+          enabled: true
+
+        controller:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: consul
