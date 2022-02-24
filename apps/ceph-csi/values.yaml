@@ -6,6 +6,9 @@ ceph-csi-rbd:
         - "192.168.12.11:6789"
         - "192.168.12.12:6789"
 
+provisioner:
+  replicaCount: 1
+
 storageClass:
   create: true
   clusterID: c73c9430-7e20-11ec-bbbf-5fe532a04e48
