@@ -1,5 +1,4 @@
 argo-cd:
-  installCRDs: false
   global:
     image:
       tag: v2.2.5
