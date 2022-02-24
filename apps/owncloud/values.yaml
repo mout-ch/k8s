@@ -2,3 +2,4 @@
 owncloud:
   global:
     storageClass: csi-rbd-sc
+  owncloudHost: cloud.kelbert.fr
