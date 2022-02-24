@@ -1,0 +1,4 @@
+---
+owncloud:
+  global:
+    storageClass: csi-rbd-sc

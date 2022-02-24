@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: owncloud
+description: personnal owncloud
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: owncloud
+    version: 11.0.9
+    repository: https://charts.bitnami.com/bitnami
