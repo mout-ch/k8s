@@ -3,3 +3,5 @@ owncloud:
   global:
     storageClass: csi-rbd-sc
   owncloudHost: cloud.kelbert.fr
+  persistence:
+    size: 50Gi
