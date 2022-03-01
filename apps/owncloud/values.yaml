@@ -5,3 +5,5 @@ owncloud:
   owncloudHost: cloud.kelbert.fr
   persistence:
     size: 50Gi
+  service:
+    type: ClusterIP
