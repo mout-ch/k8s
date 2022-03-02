@@ -14,7 +14,7 @@ spec:
   source:
     path: apps/postgres-op
     repoURL: https://gitlab.com/mout.ch/k8s.git
-    targetRevision: HEAD
+    targetRevision: 2-add-postgres-operator
   syncPolicy:
     automated:
       prune: true
