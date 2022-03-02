@@ -1,12 +1,12 @@
 ---
 apiVersion: v2
-name: <required>
-description: <optionnal>
+name: postgres-op
+description: zalendo postgres operator
 
 type: application
 version: 0.1.0
 
 dependencies:
-  - name: <required>
-    version: <required>
-    repository: <required>
+  - name: postgres-operator
+    version: v1.7.1
+    repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator/
