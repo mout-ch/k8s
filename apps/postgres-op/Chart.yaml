@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: <required>
+description: <optionnal>
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: <required>
+    version: <required>
+    repository: <required>
