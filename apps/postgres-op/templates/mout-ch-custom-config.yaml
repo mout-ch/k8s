@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mout-ch-custom-config.yaml
+  namespace: postgres-op
+data:
+  ALLOW_NOSSL: true
