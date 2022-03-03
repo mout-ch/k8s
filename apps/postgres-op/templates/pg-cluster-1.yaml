@@ -2,22 +2,21 @@
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: acid-minimal-cluster
+  name: pg-cluster-1
   namespace: postgres-op
 spec:
-  teamId: "acid"
+  teamId: "mout-ch"
   volume:
     size: 1Gi
     storageClass: csi-rbd-sc
   numberOfInstances: 2
   users:
-    zalando:  # database owner
+    admin:  # database owner
     - superuser
     - createdb
-    foo_user: []  # role for application foo
+    owncloud.owncloud-db: []  # role for application foo
   databases:
-    foo: zalando  # dbname: owner
-  preparedDatabases:
-    bar: {}
+    owncloud-db: owncloud-db  # dbname: owner
   postgresql:
     version: "14"
+  enable_cross_namespace_secret: true
