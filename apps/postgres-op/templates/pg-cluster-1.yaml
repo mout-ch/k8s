@@ -1,0 +1,22 @@
+---
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: mout-ch-pg-cluster-1
+  namespace: postgres-op
+spec:
+  teamId: "mout-ch"
+  volume:
+    size: 1Gi
+    storageClass: csi-rbd-sc
+  numberOfInstances: 2
+  users:
+    rootmout:
+    - superuser
+    - createdb
+    # prefixed with owncloud. to make secret available on owncloud namespace
+    owncloud.owncloud: []
+  databases:
+    owncloud: owncloud.owncloud
+  postgresql:
+    version: "14"
