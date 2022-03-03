@@ -22,3 +22,13 @@ owncloud:
       traefik.ingress.kubernetes.io/redirect-permanent: "true"
 
   tls: true
+
+  mariadb:
+    enabled: false
+
+  externalDatabase:
+    host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
+    port: 5432
+    user: owncloud.owncloud
+    database: owncloud
+    existingSecret: owncloud-db-secret
