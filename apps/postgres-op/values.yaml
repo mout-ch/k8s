@@ -1,0 +1,4 @@
+---
+postgres-operator:
+  configKubernetes:
+    enable_cross_namespace_secret: true
