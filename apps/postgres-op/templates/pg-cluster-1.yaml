@@ -2,7 +2,7 @@
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: pg-cluster-1
+  name: mout-ch-pg-cluster-1
   namespace: postgres-op
 spec:
   teamId: "mout-ch"
