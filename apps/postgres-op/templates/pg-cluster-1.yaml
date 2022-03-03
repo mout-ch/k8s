@@ -19,4 +19,3 @@ spec:
     owncloud-db: owncloud-db  # dbname: owner
   postgresql:
     version: "14"
-  enable_cross_namespace_secret: true
