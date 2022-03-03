@@ -16,6 +16,6 @@ spec:
     - createdb
     owncloud.owncloud-db: []  # role for application foo
   databases:
-    owncloud-db: owncloud-db  # dbname: owner
+    owncloud-db: owncloud.owncloud-db  # dbname: owner
   postgresql:
     version: "14"
