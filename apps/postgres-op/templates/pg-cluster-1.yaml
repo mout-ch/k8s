@@ -11,11 +11,12 @@ spec:
     storageClass: csi-rbd-sc
   numberOfInstances: 2
   users:
-    rootmout:  # database owner
+    rootmout:
     - superuser
     - createdb
-    owncloud.owncloud-db: []  # role for application foo
+    # prefixed with owncloud. to make secret available on owncloud namespace
+    owncloud.owncloud: []
   databases:
-    owncloud: owncloud.owncloud-db  # dbname: owner
+    owncloud: owncloud.owncloud
   postgresql:
     version: "14"
