@@ -2,17 +2,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: owncloud
+  name: nextcloud
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: owncloud
+    namespace: nextcloud
   project: default
   source:
-    path: apps/owncloud
+    path: apps/nextcloud
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
   syncPolicy:

@@ -1,6 +1,0 @@
-dependencies:
-- name: owncloud
-  repository: https://charts.bitnami.com/bitnami
-  version: 11.0.9
-digest: sha256:d89bd05f3f8ff1bb098f8f160f7c8f6278883ebf90eaa0092312cc8fb606f879
-generated: "2022-02-27T00:38:04.74938726+01:00"

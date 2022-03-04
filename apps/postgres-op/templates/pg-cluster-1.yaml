@@ -15,8 +15,8 @@ spec:
     - superuser
     - createdb
     # prefixed with owncloud. to make secret available on owncloud namespace
-    owncloud.owncloud: []
+    nextcloud.nextcloud: []
   databases:
-    owncloud: owncloud.owncloud
+    nextcloud: nextcloud.nextcloud
   postgresql:
     version: "14"

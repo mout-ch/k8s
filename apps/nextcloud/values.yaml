@@ -1,0 +1,41 @@
+---
+  nextcloud:
+    nextcloud:
+      host: cloud.kelbert.fr
+
+    internalDatabase:
+      enabled: false
+
+    externalDatabase:
+      enabled: true
+      type: postgresql
+      host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
+      user: nextcloud.nextcloud
+      database: nextcloud
+      existingSecret:
+        enabled: true
+        secretName: nextcloud.nextcloud.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+        usernameKey: username
+        passwordKey: password
+
+    mariadb:
+      enabled: false
+
+    persistence:
+      enabled: true
+      storageClass: csi-rbd-sc
+      size: 50Gi
+
+    ingress:
+      enabled: true
+      tls:
+        - secretName: cloud.kelbert.fr-tls
+          hosts:
+            - cloud.kelbert.fr
+
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+        traefik.ingress.kubernetes.io/redirect-permanent: "true"
