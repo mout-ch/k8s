@@ -2,6 +2,11 @@
   nextcloud:
     nextcloud:
       host: cloud.kelbert.fr
+      existingSecret:
+        enabled: true
+        secretName: nextcloud-admin-account
+        usernameKey: username
+        passwordKey: password
 
     internalDatabase:
       enabled: false
