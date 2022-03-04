@@ -1,5 +1,7 @@
 ---
   nextcloud:
+    image:
+      tag: 23.0.2-apache
     nextcloud:
       host: cloud.kelbert.fr
       existingSecret:
