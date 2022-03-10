@@ -47,3 +47,6 @@
         traefik.ingress.kubernetes.io/redirect-entry-point: https
         traefik.ingress.kubernetes.io/redirect-permanent: "true"
         traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+        
+    metrics:
+      enabled: true
