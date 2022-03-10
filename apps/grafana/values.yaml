@@ -9,3 +9,15 @@
          url: http://prometheus-server.prometheus.svc.cluster.local
          access: proxy
          isDefault: true
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+      hosts:
+        - grafana.infra.mout.ch
+      tls:
+        - hosts:
+          - grafana.infra.mout.ch
+          secretName: grafana.infra.mout.ch
