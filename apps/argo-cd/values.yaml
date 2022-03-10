@@ -15,3 +15,15 @@ argo-cd:
         - type: helm
           name: argo-cd
           url: https://argoproj.github.io/argo-helm
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+      hosts:
+        - argocd.infra.mout.ch
+      tls:
+        - hosts:
+          - argocd.infra.mout.ch
+          secretName: argocd.infra.mout.ch-tls

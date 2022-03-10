@@ -20,4 +20,4 @@
       tls:
         - hosts:
           - grafana.infra.mout.ch
-          secretName: grafana.infra.mout.ch
+          secretName: grafana.infra.mout.ch-tls
