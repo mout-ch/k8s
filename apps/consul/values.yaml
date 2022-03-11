@@ -1,0 +1,41 @@
+---
+consul:
+  global:
+    datacenter: dc2
+    federation:
+      enabled: true
+      primaryDatacenter: "dc1"
+      primaryGateways: [192.168.11.10:8555]
+
+    tls:
+      enabled: true
+      caCert:
+        secretName: consul-federation
+        secretKey: caCert
+      caKey:
+        secretName: consul-federation
+        secretKey: caKey
+
+    acls:
+      manageSystemACLs: true
+      replicationToken:
+        secretName: consul-federation
+        secretKey: replicationToken
+
+    gossipEncryption:
+      secretName: consul-federation
+      secretKey: gossipEncryptionKey
+
+  controller:
+    enabled: true
+
+  meshGateway:
+    enabled: true
+    replicas: 1
+    wanAddress:
+      source: "Static"
+      port: 8555
+      static: "192.168.11.20"
+
+  connectInject:
+    enabled: true
