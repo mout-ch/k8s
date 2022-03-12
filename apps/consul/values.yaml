@@ -32,10 +32,13 @@ consul:
   meshGateway:
     enabled: true
     replicas: 1
-    wanAddress:
-      source: "Static"
-      port: 8555
-      static: "192.168.11.20"
 
   connectInject:
     enabled: true
+
+  server:
+    extraConfig: |
+      {
+        "primary_datacenter": "dc1",
+        "primary_gateways": ["192.168.11.10"]
+      }
