@@ -1,6 +1,7 @@
 ---
 consul:
   global:
+    image: hashicorp/consul:1.11.2
     datacenter: dc2
     federation:
       enabled: true
