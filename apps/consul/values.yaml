@@ -5,7 +5,7 @@ consul:
     federation:
       enabled: true
       primaryDatacenter: "dc1"
-      primaryGateways: [192.168.11.10:8555]
+      primaryGateways: [ 192.168.11.10:8555 ]
 
     tls:
       enabled: true
@@ -35,10 +35,3 @@ consul:
 
   connectInject:
     enabled: true
-
-  server:
-    extraConfig: |
-      {
-        "primary_datacenter": "dc1",
-        "primary_gateways": ["192.168.11.10:8555"]
-      }
