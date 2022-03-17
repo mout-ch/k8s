@@ -33,6 +33,8 @@ consul:
   meshGateway:
     enabled: true
     replicas: 1
+    service:
+      port: 8555
 
   connectInject:
     enabled: true
