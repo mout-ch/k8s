@@ -1,0 +1,100 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cocovoit
+spec:
+  selector:
+    matchLabels:
+      app: cocovoit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cocovoit
+    spec:
+      containers:
+      - name: cocovoit
+        image: registry.gitlab.com/rootmout-epita/cocovoit:v1.0.0
+        ports:
+        - containerPort: 80
+        env:
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: db_name
+
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: db_host
+
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: db_port
+
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: cocovoit.cocovoit.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: username
+                optional: false
+
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cocovoit.cocovoit.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: password
+                optional: false
+
+          - name: MAIL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: mail_host
+
+          - name: MAIL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: mail_port
+
+          - name: MAIL_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: cocovoit
+                key: mail_username
+
+          - name: MAIL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cocovoit
+                key: mail_password
+
+          - name: MAIL_ENCRYPTION
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: mail_encryption
+
+          - name: MAIL_SENDER_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: mail_sender_address
+
+          - name: APP_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: cocovoit
+                key: app_env
+
+          - name: APP_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: cocovoit
+                key: app_secret
