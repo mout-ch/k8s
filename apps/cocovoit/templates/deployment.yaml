@@ -66,14 +66,14 @@ spec:
           - name: MAIL_USERNAME
             valueFrom:
               secretKeyRef:
-                name: cocovoit
-                key: mail_username
+                name: cocovoit-mail
+                key: username
 
           - name: MAIL_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: cocovoit
-                key: mail_password
+                name: cocovoit-mail
+                key: password
 
           - name: MAIL_ENCRYPTION
             valueFrom:
@@ -96,5 +96,5 @@ spec:
           - name: APP_SECRET
             valueFrom:
               secretKeyRef:
-                name: cocovoit
-                key: app_secret
+                name: cocovoit-app
+                key: app
