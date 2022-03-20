@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: cocovoit
-        image: registry.gitlab.com/rootmout-epita/cocovoit:v1.0.0
+        image: registry.gitlab.com/rootmout-epita/cocovoit:v1.0.1
         ports:
         - containerPort: 80
         env:
