@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: epibank
+description: epibank deployment
+
+type: application
+version: 0.1.0

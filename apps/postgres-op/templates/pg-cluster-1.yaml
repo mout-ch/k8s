@@ -17,8 +17,10 @@ spec:
     # prefixed with owncloud. to make secret available on owncloud namespace
     nextcloud.nextcloud: []
     cocovoit.cocovoit: []
+    epibank.epibank: []
   databases:
     nextcloud: nextcloud.nextcloud
     cocovoit: cocovoit.cocovoit
+    epibank: epibank.epibank
   postgresql:
     version: "14"

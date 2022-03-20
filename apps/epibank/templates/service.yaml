@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: epibank
+  labels:
+    app: epibank
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: epibank

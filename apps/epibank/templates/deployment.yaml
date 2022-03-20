@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: epibank
+spec:
+  selector:
+    matchLabels:
+      app: epibank
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: epibank
+    spec:
+      containers:
+      - name: epibank
+        image: registry.gitlab.com/rootmout-epita/epibank:v1.0.0
+        ports:
+        - containerPort: 80
+        env:
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: epibank
+                key: db_name
+
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: epibank
+                key: db_host
+
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: epibank
+                key: db_port
+
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: epibank.epibank.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: username
+                optional: false
+
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: epibank.epibank.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: password
+                optional: false
+
+          - name: APP_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: epibank
+                key: app_env
+
+          - name: APP_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: epibank-app
+                key: app

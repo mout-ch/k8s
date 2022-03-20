@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: epibank
+data:
+  db_name: "epibank"
+  db_host: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+  db_port: "5432"
+
+  app_env: "prod"
