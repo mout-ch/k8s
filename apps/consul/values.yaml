@@ -38,3 +38,6 @@ consul:
 
   connectInject:
     enabled: true
+
+  server:
+    replicas: 1
