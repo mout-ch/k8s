@@ -6,7 +6,7 @@ consul:
     federation:
       enabled: true
       primaryDatacenter: "dc1"
-      primaryGateways: [ 192.168.11.10:8555 ]
+      primaryGateways: [ 192.168.11.10:30555 ]
 
     tls:
       enabled: true
