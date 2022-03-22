@@ -34,6 +34,13 @@ consul:
     enabled: true
     replicas: 1
     service:
+      nodePort: 8555
+      enabled: true
+      type: NodePort
+    wanAddress:
+      enabled: true
+      source: "Static"
+      static: "compute-1.hirsingue.infra.mout.ch"
       port: 8555
 
   connectInject:
