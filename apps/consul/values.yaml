@@ -40,7 +40,7 @@ consul:
     wanAddress:
       enabled: true
       source: "Static"
-      static: "compute-1.hirsingue.infra.mout.ch"
+      static: "192.168.11.20"
       port: 30555
 
   connectInject:
