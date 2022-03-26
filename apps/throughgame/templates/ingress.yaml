@@ -12,7 +12,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
 spec:
   rules:
-  - host: pharma.lab.kelbert.fr
+  - host: throughgame.kelbert.fr
     http:
       paths:
       - path: /
