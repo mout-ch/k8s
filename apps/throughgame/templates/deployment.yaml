@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: throughgame
+spec:
+  selector:
+    matchLabels:
+      app: throughgame
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: throughgame
+    spec:
+      containers:
+      - name: throughgame
+        image: registry.gitlab.com/rootmout-epita/through-website:v1.0.0
+        ports:
+        - containerPort: 80
