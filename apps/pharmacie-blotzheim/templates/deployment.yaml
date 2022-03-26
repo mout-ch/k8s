@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pharmacie-blotzheim
+spec:
+  selector:
+    matchLabels:
+      app: pharmacie-blotzheim
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pharmacie-blotzheim
+    spec:
+      containers:
+      - name: pharmacie-blotzheim
+        image: registry.gitlab.com/kelbert-web-services/pharmacie-st-joseph:v0.0.1
+        ports:
+        - containerPort: 80

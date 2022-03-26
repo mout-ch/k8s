@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pharmacie-blotzheim
+  labels:
+    app: pharmacie-blotzheim
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: pharmacie-blotzheim
