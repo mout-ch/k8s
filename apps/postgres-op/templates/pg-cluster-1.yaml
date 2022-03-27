@@ -18,9 +18,11 @@ spec:
     nextcloud.nextcloud: []
     cocovoit.cocovoit: []
     epibank.epibank: []
+    simone.simone: []
   databases:
     nextcloud: nextcloud.nextcloud
     cocovoit: cocovoit.cocovoit
     epibank: epibank.epibank
+    simone: simone.simone
   postgresql:
     version: "14"

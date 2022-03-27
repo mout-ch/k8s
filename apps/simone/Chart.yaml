@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: simone
+description: simone deployment
+
+type: application
+version: 0.1.0

@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simone
+spec:
+  selector:
+    matchLabels:
+      app: simone
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simone
+    spec:
+      containers:
+      - name: simone
+        image: registry.gitlab.com/kelbert-web-services/simone:v1.2.0
+        ports:
+        - containerPort: 80
+        env:
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: simone
+                key: db_name
+
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: simone
+                key: db_host
+
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: simone
+                key: db_port
+
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: simone.simone.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: username
+                optional: false
+
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: simone.simone.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                key: password
+                optional: false
+
+          - name: APP_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: simone
+                key: app_env
+
+          - name: APP_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: simone-app
+                key: app
