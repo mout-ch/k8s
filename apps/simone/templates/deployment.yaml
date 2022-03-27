@@ -13,6 +13,8 @@ spec:
       labels:
         app: simone
     spec:
+      imagePullSecrets:
+        - name: simone-registry
       containers:
       - name: simone
         image: registry.gitlab.com/kelbert-web-services/simone:v1.2.0
