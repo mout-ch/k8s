@@ -14,6 +14,6 @@ The root folder contains the argocd root application in charge of deploying all 
 
 The k3s cluster is part of mout.ch infrastructure where provides a consul and ceph cluster. The first is for creating a zero-trust service mesh (not in production for now, but soon), and the second provides a full resilient storage backend and is currently in use. All applications can also use the StorageClass created by ceph-csi-rbd provisioner to get a volume backed in ceph.
 
-### Legacy code
+### Secrets
 
-Some directory present here are still from a legacy use of the cluster and they will be removed soon.
+The secrets are stored in vault and then injected into k8s with [vault-secret-operator](https://github.com/ricoberger/vault-secrets-operator). These are essentially services external to the cluster that go through vault, such as tokens to access email or the gitlab registry. See [Access a private docker registry with vault-secret-operator's help ](https://blog.kelbert.fr/posts/acces-private-docker-registry-with-vault-secret-operator-s-help/).
