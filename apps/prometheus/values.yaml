@@ -7,3 +7,5 @@ prometheus:
           static_configs:
             - targets:
               - 192.168.11.10:9283
+  nodeExporter:
+    enabled: false
