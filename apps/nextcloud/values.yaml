@@ -60,4 +60,4 @@
 
     metrics:
       enabled: true
-      timeout: 30s
+      timeout: 40s
