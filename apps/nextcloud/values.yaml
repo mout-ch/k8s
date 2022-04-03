@@ -9,12 +9,15 @@
         secretName: nextcloud-admin-account
         usernameKey: username
         passwordKey: password
+
       configs:
        proxy.config.php: |-
          <?php
          $CONFIG = array (
            'overwritehost' => 'cloud.kelbert.fr',
            'overwriteprotocol' => 'https',
+           'trusted_domains' => ['cloud.kelbert.fr'],
+           'trusted_proxies' => ['176.148.142.248'],
          );
 
     internalDatabase:
