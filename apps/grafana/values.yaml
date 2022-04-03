@@ -31,6 +31,14 @@
           gnetId: 2842
           revision: 14
           datasource: Prometheus
+        traefik:
+          gnetId: 4475
+          revision: 5
+          datasource: Prometheus
+        node-exporter:
+          gnetId: 1860
+          revision: 26
+          datasource: Prometheus
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
