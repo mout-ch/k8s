@@ -21,3 +21,13 @@
         - hosts:
           - grafana.infra.mout.ch
           secretName: grafana.infra.mout.ch-tls
+    admin:
+      existingSecret: "grafana"
+      userKey: "username"
+      passwordKey: "password"
+    dashboards:
+      default:
+        ceph:
+          gnetId: 2842
+          revision: 14
+          datasource: Prometheus
