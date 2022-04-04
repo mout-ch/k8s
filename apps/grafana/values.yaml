@@ -39,6 +39,10 @@
           gnetId: 1860
           revision: 26
           datasource: Prometheus
+        cert-manager:
+          gnetId: 11001
+          revision: 1
+          datasource: Prometheus
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
