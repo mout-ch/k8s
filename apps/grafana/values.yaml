@@ -43,6 +43,10 @@
           gnetId: 11001
           revision: 1
           datasource: Prometheus
+        nextcloud:
+          gnetId: 9632
+          revision: 1
+          datasource: Prometheus
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
