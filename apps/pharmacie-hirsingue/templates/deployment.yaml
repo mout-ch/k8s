@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: pharmacie-hirsingue
-        image: registry.gitlab.com/kelbert-web-services/pharmacie-de-l-ill:v1.0.0
+        image: registry.gitlab.com/kelbert-web-services/pharmacie-de-l-ill:v1.0.1
         ports:
         - containerPort: 80
