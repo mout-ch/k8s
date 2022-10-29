@@ -12,7 +12,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
 spec:
   rules:
-  - host: pharma.lab.kelbert.fr
+  - host: pharmacie-st-joseph.com
     http:
       paths:
       - path: /
@@ -22,7 +22,8 @@ spec:
             name: pharmacie-blotzheim
             port:
               number: 80
+
   tls:
     - hosts:
-      - pharma.lab.kelbert.fr
-      secretName: pharma.lab.kelbert.fr-tls
+      - pharmacie-st-joseph.com
+      secretName: pharmacie.st.joseph.com-tls
