@@ -9,5 +9,10 @@ minecraft:
   minecraftServer:
     eula: "TRUE"
     motd: "Welcome to minecraft.mout.ch server!"
+    serviceType: NodePort
+    NodePort: 25565
+
   persistence:
     storageClass: csi-rbd-sc
+    enabled: true
+    Size: 1Gi
