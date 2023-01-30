@@ -1,0 +1,12 @@
+---
+minecraft:
+  image:
+    repository: itzg/minecraft-server
+    tag: 2022.16.0-java17
+    pullPolicy: IfNotPresent
+    pullSecret: ""
+
+  minecraftServer:
+    motd: "Welcome to minecraft.mout.ch server!"
+  persistence:
+    storageClass: csi-rbd-sc
