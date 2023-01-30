@@ -14,5 +14,6 @@ minecraft:
 
   persistence:
     storageClass: csi-rbd-sc
-    enabled: true
-    Size: 1Gi
+    dataDir:
+      enabled: true
+      Size: 1Gi
