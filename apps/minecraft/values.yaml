@@ -7,6 +7,7 @@ minecraft:
     pullSecret: ""
 
   minecraftServer:
+    eula: "TRUE"
     motd: "Welcome to minecraft.mout.ch server!"
   persistence:
     storageClass: csi-rbd-sc
