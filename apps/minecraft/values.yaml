@@ -11,6 +11,10 @@ minecraft:
     motd: "Welcome to minecraft.mout.ch server!"
     serviceType: NodePort
     NodePort: 25565
+    rcon:
+      enabled: true
+      existingSecret: minecraft-rcon
+      secretKey: password
 
   persistence:
     storageClass: csi-rbd-sc
