@@ -17,39 +17,37 @@ minecraft:
       secretKey: password
     extraPorts:
       - name: metrics
-        containerPort: 8080
+        containerPort: 9150
         protocol: TCP
         service:
           enabled: true
           embedded: false
           annotations:
-            prometheus.io/port: '8080'
+            prometheus.io/port: '9150'
             prometheus.io/scrape: 'true'
           type: ClusterIP
-          port: 8080
+          port: 9150
         ingress:
           enabled: false
 
   sidecarContainers:
     - name: exporter
-      image: joshi425/minecraft_exporter:latest
+      image: ghcr.io/dirien/minecraft-exporter:0.17.1
       volumeMounts:
-        - mountPath: /world
+        - mountPath: /minecraft/world
           name: datadir
           subPath: world
           readOnly: true
       env:
-        - name: RCON_HOST
-          value: 127.0.0.1
-        - name: RCON_PORT
-          value: '25575'
-        - name: RCON_PASSWORD
+        - name: MC_RCON_ADDRESS
+          value: '127.0.0.1:25575'
+        - name: MC_RCON_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
               name: minecraft-rcon
-        - name: HTTP_PORT
-          value: '8080'
+        - name: WEB_DISABLED_EXPORTER_METRICS
+          value: 'true'
 
   persistence:
     storageClass: csi-rbd-sc
