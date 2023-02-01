@@ -15,9 +15,46 @@ minecraft:
       enabled: true
       existingSecret: minecraft-rcon
       secretKey: password
+    extraPorts:
+      - name: metrics
+        containerPort: 8080
+        protocol: TCP
+        service:
+          enabled: true
+          embedded: true
+          annotations: {}
+          type: ClusterIP
+          port: 8080
+        ingress:
+          enabled: false
+
+  sidecarContainers:
+    - name: exporter
+      image: joshi425/minecraft_exporter:latest
+      volumeMounts:
+        - mountPath: /world
+          name: datadir
+          subPath: world
+          readOnly: true
+      env:
+        - name: RCON_HOST
+          value: 127.0.0.1
+        - name: RCON_PORT
+          value: '25575'
+        - name: RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: minecraft-rcon
+        - name: HTTP_PORT
+          value: '8080'
 
   persistence:
     storageClass: csi-rbd-sc
     dataDir:
       enabled: true
       Size: 1Gi
+
+  serviceAnnotations:
+    prometheus.io/port: '8080'
+    prometheus.io/scrape: 'true'
