@@ -10,7 +10,7 @@ minecraft:
     eula: "TRUE"
     motd: "Welcome to minecraft.mout.ch server!"
     serviceType: NodePort
-    NodePort: 25565
+    nodePort: 30573
     rcon:
       enabled: true
       existingSecret: minecraft-rcon
@@ -21,8 +21,10 @@ minecraft:
         protocol: TCP
         service:
           enabled: true
-          embedded: true
-          annotations: {}
+          embedded: false
+          annotations:
+            prometheus.io/port: '8080'
+            prometheus.io/scrape: 'true'
           type: ClusterIP
           port: 8080
         ingress:
@@ -54,7 +56,3 @@ minecraft:
     dataDir:
       enabled: true
       Size: 1Gi
-
-  serviceAnnotations:
-    prometheus.io/port: '8080'
-    prometheus.io/scrape: 'true'
