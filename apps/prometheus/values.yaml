@@ -5,6 +5,8 @@ prometheus:
       static_configs:
         - targets:
           - 192.168.11.10:9283
+          - 192.168.11.11:9283
+          - 192.168.11.12:9283
     - job_name: nodes
       static_configs:
         - targets:
