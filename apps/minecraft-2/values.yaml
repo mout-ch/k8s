@@ -1,0 +1,59 @@
+---
+minecraft:
+  image:
+    repository: itzg/minecraft-server
+    tag: 2022.16.0-java17
+    pullPolicy: IfNotPresent
+    pullSecret: ""
+
+  minecraftServer:
+    type: FORGE
+    eula: "TRUE"
+    motd: "minecraft.mout.ch:22566"
+    serviceType: NodePort
+    nodePort: 30574
+    rcon:
+      enabled: true
+      existingSecret: minecraft-rcon
+      secretKey: password
+    extraPorts:
+      - name: metrics
+        containerPort: 9150
+        protocol: TCP
+        service:
+          enabled: true
+          embedded: false
+          annotations:
+            prometheus.io/port: '9150'
+            prometheus.io/scrape: 'true'
+          type: ClusterIP
+          port: 9150
+        ingress:
+          enabled: false
+
+  sidecarContainers:
+    - name: exporter
+      image: ghcr.io/dirien/minecraft-exporter:0.17.1
+      volumeMounts:
+        - mountPath: /minecraft/world
+          name: datadir
+          subPath: world
+          readOnly: true
+      env:
+        - name: MC_RCON_ADDRESS
+          value: '127.0.0.1:25575'
+        - name: MC_RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: minecraft-rcon
+        - name: WEB_DISABLED_EXPORTER_METRICS
+          value: 'true'
+        - name: MC_MOD_SERVER_STATS
+          value: 'forge'
+
+  persistence:
+    storageClass: csi-rbd-sc
+    dataDir:
+      enabled: true
+      Size: 1Gi
