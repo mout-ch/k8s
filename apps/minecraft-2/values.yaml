@@ -57,4 +57,4 @@ minecraft:
     storageClass: csi-rbd-sc
     dataDir:
       enabled: true
-      Size: 1Gi
+      Size: 30Gi
