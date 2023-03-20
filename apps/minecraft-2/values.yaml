@@ -9,6 +9,7 @@ minecraft:
   minecraftServer:
     type: FORGE
     eula: "TRUE"
+    version: "1.19.4"
     motd: "minecraft.mout.ch:22566"
     serviceType: NodePort
     nodePort: 30574
