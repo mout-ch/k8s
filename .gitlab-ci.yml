@@ -13,4 +13,8 @@
 #     DOCKER_PASSWORD: ...
 include:
 - template: Security/Secret-Detection.gitlab-ci.yml
-- template: Jobs/Container-Scanning.gitlab-ci.yml
+- template: Security/SAST.gitlab-ci.yml
+stages:
+- test
+sast:
+  stage: test
