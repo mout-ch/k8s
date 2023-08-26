@@ -7,7 +7,7 @@ minecraft:
     pullSecret: ""
 
   minecraftServer:
-    type: CURSEFORGE
+    type: FORGE
     eula: "TRUE"
     version: "1.20.1"
     motd: "minecraft.mout.ch:22567"
