@@ -1,0 +1,65 @@
+---
+minecraft:
+  image:
+    repository: itzg/minecraft-server
+    tag: 2022.16.0-java17
+    pullPolicy: IfNotPresent
+    pullSecret: ""
+
+  minecraftServer:
+    type: CURSEFORGE
+    eula: "TRUE"
+    version: "1.20.1"
+    motd: "minecraft.mout.ch:22567"
+    serviceType: NodePort
+    nodePort: 30575
+    modUrls:
+      - https://mediafilez.forgecdn.net/files/4678/770/immersive_armors-1.2.3%2B1.17.1.jar
+      - https://mediafilez.forgecdn.net/files/4044/290/TerraForged-1.16.5-0.2.16.jar
+      - https://mediafilez.forgecdn.net/files/4678/770/immersive_armors-1.2.3%2B1.17.1.jar
+      - https://mediafilez.forgecdn.net/files/4617/259/BiomesOPlenty-1.20.1-18.0.0.592.jar
+    rcon:
+      enabled: true
+      existingSecret: minecraft-rcon
+      secretKey: password
+    extraPorts:
+      - name: metrics
+        containerPort: 9150
+        protocol: TCP
+        service:
+          enabled: true
+          embedded: false
+          annotations:
+            prometheus.io/port: '9150'
+            prometheus.io/scrape: 'true'
+          type: ClusterIP
+          port: 9150
+        ingress:
+          enabled: false
+
+  sidecarContainers:
+    - name: exporter
+      image: ghcr.io/dirien/minecraft-exporter:0.17.1
+      volumeMounts:
+        - mountPath: /minecraft/world
+          name: datadir
+          subPath: world
+          readOnly: true
+      env:
+        - name: MC_RCON_ADDRESS
+          value: '127.0.0.1:25575'
+        - name: MC_RCON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: minecraft-rcon
+        - name: WEB_DISABLED_EXPORTER_METRICS
+          value: 'true'
+        - name: MC_MOD_SERVER_STATS
+          value: 'forge'
+
+  persistence:
+    storageClass: csi-rbd-sc
+    dataDir:
+      enabled: true
+      Size: 5Gi
