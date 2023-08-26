@@ -8,5 +8,5 @@ version: 0.1.0
 
 dependencies:
   - name: minecraft
-    version: v4.5.0
+    version: v4.9.5
     repository: https://itzg.github.io/minecraft-server-charts/
