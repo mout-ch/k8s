@@ -5,7 +5,7 @@ metadata:
   name: grafana
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: https://kubernetes.default.svc
@@ -15,7 +15,4 @@ spec:
     path: apps/grafana
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  syncPolicy: {}
