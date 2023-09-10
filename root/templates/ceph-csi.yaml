@@ -9,7 +9,7 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: ceph-csi
   project: default
   source:
     path: apps/ceph-csi
