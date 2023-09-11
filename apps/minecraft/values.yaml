@@ -15,6 +15,7 @@ minecraft:
     nodePort: 30573
     removeOldMods: true
     downloadModpackUrl: https://mediafilez.forgecdn.net/files/4748/132/All+the+Mods+8-1.0.26.zip
+    onlineMode: default
     rcon:
       enabled: true
       existingSecret: minecraft-rcon
