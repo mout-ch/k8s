@@ -7,14 +7,14 @@ minecraft:
     pullSecret: ""
 
   minecraftServer:
-    type: FORGE
+    type: CURSEFORGE
     eula: "TRUE"
     version: "1.19.2"
     motd: "Benjito <3"
     serviceType: NodePort
     nodePort: 30573
     removeOldMods: true
-    downloadModpackUrl: https://mediafilez.forgecdn.net/files/4748/132/All+the+Mods+8-1.0.26.zip
+    cfServerMod: All+the+Mods+8-1.0.26.zip  #https://mediafilez.forgecdn.net/files/4748/132/All+the+Mods+8-1.0.26.zip
     onlineMode: default
     rcon:
       enabled: true
