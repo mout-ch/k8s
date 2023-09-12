@@ -11,6 +11,9 @@ minecraft:
       memory: 4096Mi
       cpu: 500m
 
+  livenessProbe:
+    initialDelaySeconds: 900
+
   minecraftServer:
     type: FORGE
     eula: "TRUE"
