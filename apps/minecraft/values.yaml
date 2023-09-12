@@ -7,14 +7,17 @@ minecraft:
     pullSecret: ""
 
   minecraftServer:
-    type: CURSEFORGE
+    type: FORGE
     eula: "TRUE"
     version: "1.19.2"
+    forgeVersion: "43.2.3"
     motd: "Benjito <3"
     serviceType: NodePort
     nodePort: 30573
     removeOldMods: true
-    cfServerMod: All+the+Mods+8-1.0.26.zip  #https://mediafilez.forgecdn.net/files/4748/132/All+the+Mods+8-1.0.26.zip
+    extraEnv:
+      GENERIC_PACK: https://mediafilez.forgecdn.net/files/4372/519/Server-Files-1.0.10.zip
+      USE_MODPACK_START_SCRIPT: false
     onlineMode: default
     rcon:
       enabled: true
@@ -60,4 +63,4 @@ minecraft:
     storageClass: csi-rbd-sc
     dataDir:
       enabled: true
-      Size: 1Gi
+      Size: 10Gi
