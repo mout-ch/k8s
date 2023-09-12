@@ -27,6 +27,7 @@ minecraft:
     extraEnv:
       GENERIC_PACK: https://mediafilez.forgecdn.net/files/4372/519/Server-Files-1.0.10.zip
       USE_MODPACK_START_SCRIPT: false
+      MAX_MEMORY: 8G
     onlineMode: default
     rcon:
       enabled: true
