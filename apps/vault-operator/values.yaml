@@ -1,7 +1,7 @@
 ---
 vault-secrets-operator:
   vault:
-    address: http://192.168.11.10:8200/
+    address: http://192.168.14.10:8200/
   environmentVars:
   - name: VAULT_TOKEN
     valueFrom:
