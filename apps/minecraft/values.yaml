@@ -15,7 +15,7 @@ minecraft:
     initialDelaySeconds: 900
 
   extraEnv:
-    GENERIC_PACK: https://mediafilez.forgecdn.net/files/4372/519/Server-Files-1.0.10.zip
+    GENERIC_PACK: https://mediafilez.forgecdn.net/files/4749/383/Server-Files-1.0.27.zip
     USE_MODPACK_START_SCRIPT: false
     MAX_MEMORY: 8G
 
@@ -23,7 +23,7 @@ minecraft:
     type: FORGE
     eula: "TRUE"
     version: "1.19.2"
-    forgeVersion: "43.2.3"
+    forgeVersion: "43.2.23"
     memory: 4096M
     motd: "Benjito <3"
     serviceType: NodePort
