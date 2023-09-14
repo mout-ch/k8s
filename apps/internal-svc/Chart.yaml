@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: internal-svc
+description: internal-svc deployment
+
+type: application
+version: 0.1.0
