@@ -4,9 +4,9 @@ prometheus:
     - job_name: ceph
       static_configs:
         - targets:
-          - 192.168.14.10:9926
-          - 192.168.14.11:9926
-          - 192.168.14.12:9926
+          - 192.168.14.10:9283
+          - 192.168.14.11:9283
+          - 192.168.14.12:9283
     - job_name: nodes
       static_configs:
         - targets:
