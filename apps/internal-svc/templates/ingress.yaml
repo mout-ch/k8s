@@ -31,7 +31,7 @@ spec:
             service:
               name: internal-svc
               port:
-                number: 8443
+                number: 8080
   tls:
     - hosts:
         - vault.infra.mout.ch
