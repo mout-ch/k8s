@@ -15,7 +15,7 @@ nextcloud:
          'overwritehost' => 'cloud.kelbert.fr',
          'overwriteprotocol' => 'https',
          'trusted_domains' => ['cloud.kelbert.fr'],
-         'trusted_proxies' => ['45.13.107.29'],
+         'trusted_proxies' => ['45.13.107.29', '192.168.13.1'],
        );
 
   internalDatabase:
