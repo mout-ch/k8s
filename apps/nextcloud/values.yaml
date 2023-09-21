@@ -18,6 +18,14 @@ nextcloud:
          'trusted_proxies' => ['45.13.107.29', '192.168.13.1'],
        );
 
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+
   internalDatabase:
     enabled: false
 
