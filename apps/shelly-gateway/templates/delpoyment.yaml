@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shelly-gateway
+spec:
+  selector:
+    matchLabels:
+      app: shelly-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: shelly-gateway
+    spec:
+      containers:
+        - name: shelly-gateway
+          image: ghcr.io/lesuisse/shelly-ht-action-prometheus:0.3.1
+          ports:
+            - name: https
+              containerPort: 17795
+            - name: prometheus
+              containerPort: 17796
+          env:
+            - name: SENSOR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: sensor-password

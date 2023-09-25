@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: shelly-gateway
+description: gateway between shelly sensors and prometheus
+
+type: application
+version: 0.1.0
