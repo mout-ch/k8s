@@ -9,7 +9,10 @@ minecraft:
   resources:
     requests:
       memory: 4096Mi
-      cpu: 500m
+      cpu: "500m"
+    limits:
+      memory: "8192Mi"
+      cpu: 1
 
   livenessProbe:
     initialDelaySeconds: 900
@@ -24,7 +27,7 @@ minecraft:
     eula: "TRUE"
     version: "1.19.2"
     forgeVersion: "43.2.23"
-    memory: 4096M
+    memory: 8192M
     motd: "Benjito <3"
     serviceType: NodePort
     nodePort: 30573
