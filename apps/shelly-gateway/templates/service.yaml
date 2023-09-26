@@ -6,7 +6,7 @@ metadata:
   labels:
     app: shelly-gateway
   annotations:
-    prometheus.io/port: '9150'
+    prometheus.io/port: '17796'
     prometheus.io/scrape: 'true'
 spec:
   ports:
@@ -15,7 +15,7 @@ spec:
       targetPort: http
       protocol: TCP
     - name: prometheus
-      port: 9150
+      port: 17796
       targetPort: prometheus
       protocol: TCP
 
