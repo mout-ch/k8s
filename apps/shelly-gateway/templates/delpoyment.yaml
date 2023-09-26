@@ -17,7 +17,7 @@ spec:
         - name: shelly-gateway
           image: ghcr.io/lesuisse/shelly-ht-action-prometheus:0.3.1
           ports:
-            - name: https
+            - name: http
               containerPort: 17795
             - name: prometheus
               containerPort: 17796

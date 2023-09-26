@@ -21,7 +21,7 @@ spec:
           service:
             name: shelly-gateway
             port:
-              number: 443
+              number: 17795
   tls:
     - hosts:
       - shelly-gateway.infra.mout.ch

@@ -10,9 +10,9 @@ metadata:
     prometheus.io/scrape: 'true'
 spec:
   ports:
-    - name: https
-      port: 443
-      targetPort: https
+    - name: http
+      port: 17795
+      targetPort: http
       protocol: TCP
     - name: prometheus
       port: 9150
