@@ -27,3 +27,7 @@ spec:
                 secretKeyRef:
                   key: password
                   name: sensor-password
+            - name: ADDRESS_SENSOR
+              value: 0.0.0.0:17795
+            - name: ADDRESS_METRICS
+              value: 0.0.0.0:17796
