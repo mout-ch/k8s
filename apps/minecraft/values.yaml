@@ -9,10 +9,10 @@ minecraft:
   resources:
     requests:
       memory: 4096Mi
-      cpu: "500m"
-    limits:
-      memory: "8192Mi"
       cpu: 1
+    limits:
+      memory: 10240Mi
+      cpu: 4
 
   livenessProbe:
     initialDelaySeconds: 900
@@ -20,14 +20,14 @@ minecraft:
   extraEnv:
     GENERIC_PACK: https://mediafilez.forgecdn.net/files/4749/383/Server-Files-1.0.27.zip
     USE_MODPACK_START_SCRIPT: false
-    MAX_MEMORY: 8G
+    MAX_MEMORY: 10G
 
   minecraftServer:
     type: FORGE
     eula: "TRUE"
     version: "1.19.2"
     forgeVersion: "43.2.23"
-    memory: 8192M
+    memory: 10240M
     motd: "Benjito <3"
     serviceType: NodePort
     nodePort: 30573
