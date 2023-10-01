@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: storj
+spec:
+  serviceName: "storj"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storj
+  template:
+    metadata:
+      labels:
+        app: storj
+    spec:
+      containers:
+        - name: storj
+          image: storjlabs/storagenode:21b0028
+          ports:
+            - containerPort: 28967
+          volumeMounts:
+            - name: storj-data
+              mountPath: /app/config
+            - name: storj-identity
+              mountPath: /app/identity
+          env:
+            - name: WALLET
+              value: 0x6F0F29eE3932C20739B9e1c1368eaBAB5EB9117B
+            - name: STORAGE
+              value: 2TB
+            - name: EMAIL
+              value: root@mout.ch
+            - name: ADDRESS
+              value: 152.228.139.220:28967
+            - name: SETUP
+              value: "true"
+
+      volumes:
+        - name: storj-data
+          hostPath:
+            path: /mnt/compute-2-data/storj-0
+        - name: storj-identity
+          secret:
+            secretName: storj-identity

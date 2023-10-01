@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storj
+spec:
+  selector:
+    app: storj
+  ports:
+    - name: storj-tcp
+      protocol: TCP
+      port: 30575
+      targetPort: 28967
+    - name: storj-udp
+      protocol: UDP
+      port: 30575
+      targetPort: 28967
+  type: NodePort
