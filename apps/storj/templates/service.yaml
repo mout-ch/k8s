@@ -16,3 +16,21 @@ spec:
       port: 30575
       targetPort: 28967
   type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storj-2
+spec:
+  selector:
+    app: storj-2
+  ports:
+    - name: storj-2-tcp
+      protocol: TCP
+      port: 30575
+      targetPort: 28967
+    - name: storj-2-udp
+      protocol: UDP
+      port: 30575
+      targetPort: 28967
+  type: NodePort

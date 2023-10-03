@@ -34,7 +34,7 @@ spec:
             - name: ADDRESS
               value: 152.228.139.220:28967
             - name: SETUP
-              value: "true"
+              value: "false"
 
       volumes:
         - name: storj-data
@@ -43,3 +43,49 @@ spec:
         - name: storj-identity
           secret:
             secretName: storj-identity
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: storj-2
+spec:
+  serviceName: "storj-2"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storj-2
+  template:
+    metadata:
+      labels:
+        app: storj-2
+    spec:
+      containers:
+        - name: storj-2
+          image: storjlabs/storagenode:21b0028
+          ports:
+            - containerPort: 28967
+          volumeMounts:
+            - name: storj-data
+              mountPath: /app/config
+            - name: storj-identity
+              mountPath: /app/identity
+          env:
+            - name: WALLET
+              value: 0x6F0F29eE3932C20739B9e1c1368eaBAB5EB9117B
+            - name: STORAGE
+              value: 2TB
+            - name: EMAIL
+              value: root@mout.ch
+            - name: ADDRESS
+              value: 94.23.73.226:28967
+            - name: SETUP
+              value: "true"
+
+      volumes:
+        - name: storj-data
+          hostPath:
+            path: /mnt/compute-2-data/storj-1
+        - name: storj-identity
+          secret:
+            secretName: storj-2-identity
