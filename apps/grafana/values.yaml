@@ -1,5 +1,12 @@
 ---
   grafana:
+    grafana.ini:
+      panels:
+        enable_alpha: true
+        disable_sanitize_html: true
+      security:
+        allow_embedding: true
+        cookie_samesite: none
     datasources:
       datasources.yaml:
        apiVersion: 1
