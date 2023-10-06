@@ -1,0 +1,18 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: goauthentik
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: goauthentik
+  project: default
+  source:
+    path: apps/goauthentik
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
+  syncPolicy: {}
