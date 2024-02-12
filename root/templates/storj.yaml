@@ -1,31 +1,4 @@
----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: storj
-  namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  generators:
-    - git:
-        repoURL: https://gitlab.com/rootmout/storj.git
-        revision: HEAD
-        files:
-        - path: "nodes/*"
-  template:
-    metadata:
-      name: '{{ .path.basenameNormalized }}-storj'
-    spec:
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: storj
-      project: storj
-      source:
-        path: apps/storj
-        repoURL: https://gitlab.com/mout.ch/k8s.git
-        targetRevision: HEAD
-      syncPolicy: {}
+
 
 ---
 apiVersion: ricoberger.de/v1alpha1
