@@ -10,9 +10,28 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: storj
-  project: default
+  project: storj
   source:
     path: apps/storj
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
   syncPolicy: {}
+
+---
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: storj-repo
+  namespace: argocd
+spec:
+  type: kubernetes.io/dockerconfigjson
+  path: apps/storj/repo
+  keys:
+    - username
+    - password
+  templates:
+    password: "{% .Secrets.password %}"
+    project: storj
+    type: git
+    url: "https://gitlab.com/rootmout/storj.git"
+    username: "{% .Secrets.username %}"
