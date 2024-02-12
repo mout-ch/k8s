@@ -15,4 +15,5 @@ spec:
     protocol: TCP
     port: 8080
     targetPort: ceph
-  selector: null # endpoint slice is configured manually.
+  selector:
+    app: internal-svc
