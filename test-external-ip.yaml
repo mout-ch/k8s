@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: compute-2.blotzheim.infra.mout.ch
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.1"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    exposed: "true"
+spec:
+  externalIPs:
+    - 94.23.73.226
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+
+
+
+
+
+
+# helm upgrade cilium cilium/cilium \
+#    --namespace cilium \
+#    --reuse-values \
+#    --set l2announcements.enabled=true \
+#    --set k8sClientRateLimit.qps=5 \
+#    --set k8sClientRateLimit.burst=10 \
+#    --set kubeProxyReplacement=true \
+#    --set k8sServiceHost=192.168.14.21 \
+#    --set k8sServicePort=6443
+
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: policy1
+spec:
+  serviceSelector:
+    matchLabels:
+      exposed: "true"
+  nodeSelector:
+    matchExpressions:
+      - key: kubernetes.io/hostname
+        operator: In
+        values:
+          - gate-1.ovh.infra.mout.ch
+  interfaces:
+  - ^ens[0-9]+
+  externalIPs: true
+  loadBalancerIPs: true

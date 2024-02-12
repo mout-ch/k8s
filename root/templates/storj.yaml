@@ -24,7 +24,7 @@ metadata:
   name: storj-repo
   namespace: argocd
 spec:
-  type: kubernetes.io/dockerconfigjson
+  type: Opaque
   path: apps/storj/repo
   keys:
     - username
