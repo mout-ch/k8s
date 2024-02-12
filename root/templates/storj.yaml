@@ -15,7 +15,7 @@ spec:
         - path: "nodes/*"
   template:
     metadata:
-      name: '{{path.basenameNormalized}}-storj'
+      name: '{{ .path.basenameNormalized }}-storj'
     spec:
       destination:
         server: https://kubernetes.default.svc
