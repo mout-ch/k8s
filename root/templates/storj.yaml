@@ -33,6 +33,8 @@ kind: VaultSecret
 metadata:
   name: storj-repo
   namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
 spec:
   type: Opaque
   path: apps/storj/repo
