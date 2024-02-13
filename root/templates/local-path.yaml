@@ -1,0 +1,32 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-path
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: local-path
+  project: default
+  source:
+    path: deploy/chart/local-path-provisioner
+    repoURL: https://github.com/rootmout/local-path-provisioner
+    targetRevision: 7854852da3965ddf85f5d67965e6e3162f6c6248
+  syncPolicy: {}
+    helm:
+      values: |
+        nodePathMap:
+          - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+            paths:
+              - /var/lib/rancher/k3s/storage
+          - node: compute-2.blotzheim.infra.mout.ch
+            paths:
+              - /dev/disk-0/compute-2-data
+        storageClass:
+          create: true
+          defaultClass: true
+          parameters:
+            nodePath: /var/lib/rancher/k3s/storage
