@@ -7,15 +7,18 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
         repoURL: https://gitlab.com/rootmout/storj.git
         revision: HEAD
         files:
         - path: "nodes/*"
+  syncPolicy: {}
   template:
     metadata:
-      name: '{{ name }}-storj'
+      name: {{ printf "'{{.path.filename}}-storj'" }}
     spec:
       destination:
         server: https://kubernetes.default.svc
@@ -25,7 +28,7 @@ spec:
         path: apps/storj
         repoURL: https://gitlab.com/mout.ch/k8s.git
         targetRevision: HEAD
-      syncPolicy: {}
+
 
 ---
 apiVersion: ricoberger.de/v1alpha1

@@ -11,11 +11,11 @@ spec:
     server: https://kubernetes.default.svc
     namespace: local-path
   project: default
+  syncPolicy: {}
   source:
     path: deploy/chart/local-path-provisioner
     repoURL: https://github.com/rootmout/local-path-provisioner
     targetRevision: 7854852da3965ddf85f5d67965e6e3162f6c6248
-  syncPolicy: {}
     helm:
       values: |
         nodePathMap:
