@@ -35,6 +35,12 @@ spec:
                 email: pierre.kelbert+storj@gmail.com
                 address: {{ printf "'{{.path.filename}}:28967'" }}
                 storage: 2Ti
+              identity:
+                externalSecret:
+                  secretName: {{ printf "'{{.path.filename}}-identity'" }}
+              serviceAccount:
+                create: true
+                name: {{ printf "'{{.path.filename}}'" }}
               persistence:
                 enabled: true
                 annotations: {}
@@ -43,15 +49,14 @@ spec:
                     - ReadWriteOnce
                   resources:
                     requests:
-                      storage: 2Ti
-                  storageClassName: {{ printf "'{{.storageclass}}'" }}
+                      storage: {{ printf "'{{.size}}'" }}
+                  storageClassName: {{ printf "'{{.storage_class}}'" }}
         - path: apps/storj
           repoURL: https://gitlab.com/mout.ch/k8s.git
           targetRevision: HEAD
           helm:
             valuesObject:
               node: {{ printf "'{{.path.filename}}'" }}
-
 
 ---
 apiVersion: ricoberger.de/v1alpha1
