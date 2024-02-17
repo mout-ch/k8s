@@ -36,13 +36,9 @@ spec:
                 address: {{ printf "'{{.path.filename}}:28967'" }}
                 storage: 2Ti
               identity:
-                externalSecret:
-                  secretName: {{ printf "'{{.path.filename}}'" }}-identity
                 vaultSecret:
-                  metadata:
-                    name: {{ printf "'{{.path.filename}}'" }}-identity
                   spec:
-                    path: apps/storj/nodes/{{ printf "'{{.path.filename}}'" }}
+                    path: {{ printf "'apps/storj/nodes/{{.path.filename}}'" }}
                     type: Opaque
               serviceAccount:
                 create: true
