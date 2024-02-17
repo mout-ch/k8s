@@ -33,7 +33,7 @@ spec:
               config:
                 wallet: 0x6F0F29eE3932C20739B9e1c1368eaBAB5EB9117B
                 email: pierre.kelbert+storj@gmail.com
-                address: {{ printf "'{{.path.filename}}:28967'" }}
+                address: {{ printf "'{{.ip}}:28967'" }}
                 storage: 2Ti
               identity:
                 vaultSecret:
