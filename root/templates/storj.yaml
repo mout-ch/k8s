@@ -24,10 +24,33 @@ spec:
         server: https://kubernetes.default.svc
         namespace: storj
       project: storj
-      source:
-        path: apps/storj
-        repoURL: https://gitlab.com/mout.ch/k8s.git
-        targetRevision: HEAD
+      sources:
+        - path: charts/storj-storagenode
+          repoURL: https://github.com/rootmout/storj-storagenode-chart
+          targetRevision: HEAD
+          helm:
+            valuesObject:
+              config:
+                wallet: 0x6F0F29eE3932C20739B9e1c1368eaBAB5EB9117B
+                email: pierre.kelbert+storj@gmail.com
+                address: {{ printf "'{{.path.filename}}:28967'" }}
+                storage: 2Ti
+              persistence:
+                enabled: true
+                annotations: {}
+                volumeClaimTemplate:
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 2Ti
+                  storageClassName: {{ printf "'{{.storageclass}}'" }}
+        - path: apps/storj
+          repoURL: https://gitlab.com/mout.ch/k8s.git
+          targetRevision: HEAD
+          helm:
+            valuesObject:
+              node: {{ printf "'{{.path.filename}}'" }}
 
 
 ---
