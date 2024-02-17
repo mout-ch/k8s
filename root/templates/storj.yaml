@@ -51,12 +51,12 @@ spec:
                     requests:
                       storage: {{ printf "'{{.size}}'" }}
                   storageClassName: {{ printf "'{{.storage_class}}'" }}
-        - path: apps/storj
-          repoURL: https://gitlab.com/mout.ch/k8s.git
-          targetRevision: HEAD
-          helm:
-            valuesObject:
-              node: {{ printf "'{{.path.filename}}'" }}
+        # - path: apps/storj
+        #   repoURL: https://gitlab.com/mout.ch/k8s.git
+        #   targetRevision: HEAD
+        #   helm:
+        #     valuesObject:
+        #       node: {{ printf "'{{.path.filename}}'" }}
 
 ---
 apiVersion: ricoberger.de/v1alpha1
