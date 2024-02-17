@@ -1,0 +1,19 @@
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: storj
+spec:
+  serviceSelector:
+    matchLabels:
+      app: storj
+  nodeSelector:
+    matchExpressions:
+      - key: kubernetes.io/hostname
+        operator: In
+        values:
+          - gate-1.ovh.infra.mout.ch
+  interfaces:
+  - ^ens[0-9]+
+  externalIPs: true
+  loadBalancerIPs: true
