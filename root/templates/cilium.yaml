@@ -6,7 +6,7 @@ metadata:
 spec:
   serviceSelector:
     matchLabels:
-      app: storj
+      app.kubernetes.io/name: storj-storagenode
   nodeSelector:
     matchExpressions:
       - key: kubernetes.io/hostname
