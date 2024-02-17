@@ -37,7 +37,13 @@ spec:
                 storage: 2Ti
               identity:
                 externalSecret:
-                  secretName: {{ printf "'{{.path.filename}}-identity'" }}
+                  secretName: {{ printf "'{{.path.filename}}'" }}-identity
+                vaultSecret:
+                  metadata:
+                    name: {{ printf "'{{.path.filename}}'" }}-identity
+                  spec:
+                    path: apps/storj/nodes/{{ printf "'{{.path.filename}}'" }}
+                    type: Opaque
               serviceAccount:
                 create: true
                 name: {{ printf "'{{.path.filename}}'" }}
@@ -51,12 +57,6 @@ spec:
                     requests:
                       storage: {{ printf "'{{.size}}'" }}
                   storageClassName: {{ printf "'{{.storage_class}}'" }}
-        # - path: apps/storj
-        #   repoURL: https://gitlab.com/mout.ch/k8s.git
-        #   targetRevision: HEAD
-        #   helm:
-        #     valuesObject:
-        #       node: {{ printf "'{{.path.filename}}'" }}
 
 ---
 apiVersion: ricoberger.de/v1alpha1
