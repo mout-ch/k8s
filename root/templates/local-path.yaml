@@ -24,9 +24,22 @@ spec:
               - /var/lib/rancher/k3s/storage
           - node: compute-2.blotzheim.infra.mout.ch
             paths:
-              - /dev/disk-0/compute-2-data
+              - /mnt/compute-2-data
         storageClass:
           create: true
           defaultClass: true
           parameters:
             nodePath: /var/lib/rancher/k3s/storage
+
+---
+# Size: 10T
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storj-1
+provisioner: cluster.local/release-name-local-path-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+parameters:
+  nodePath: /mnt/compute-2-data
