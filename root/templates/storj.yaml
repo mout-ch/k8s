@@ -38,6 +38,15 @@ spec:
                 email: pierre.kelbert+storj@gmail.com
                 address: {{ printf "'{{.ip}}:28967'" }}
                 storage: 2Ti
+              service:
+                storagenode:
+                  annotations:
+                    prometheus.io/scrape: "true"
+                    prometheus.io/port: "9651"
+                  type: ClusterIP
+                  externalIPs:
+                    - {{ printf "'{{.ip}}'" }}
+                  port: 28967
               identity:
                 vaultSecret:
                   spec:
