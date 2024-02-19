@@ -34,7 +34,7 @@ spec:
               metrics:
                 enabled: false
               config:
-                wallet: 0x6F0F29eE3932C20739B9e1c1368eaBAB5EB9117B
+                wallet: 0xF94170f9a892F20775eEd3141233819A732005A3
                 email: pierre.kelbert+storj@gmail.com
                 address: {{ printf "'{{.ip}}:28967'" }}
                 storage: 2Ti
