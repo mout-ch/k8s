@@ -24,7 +24,10 @@ spec:
               - /var/lib/rancher/k3s/storage
           - node: compute-2.blotzheim.infra.mout.ch
             paths:
-              - /mnt/compute-2-data
+              - /mnt/storj-0
+              - /mnt/storj-1
+              - /mnt/storj-2
+              - /mnt/storj-3
         storageClass:
           create: true
           defaultClass: true
