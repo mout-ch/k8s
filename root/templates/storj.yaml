@@ -47,6 +47,12 @@ spec:
                   externalIPs:
                     - {{ printf "'{{.ip}}'" }}
                   port: 28967
+                quic:
+                  type: ClusterIP
+                  externalIPs:
+                    - {{ printf "'{{.ip}}'" }}
+                  port: 28967
+                  protocol: UDP
               identity:
                 vaultSecret:
                   spec:
