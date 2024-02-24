@@ -13,7 +13,6 @@ spec:
         operator: In
         values:
           - gate-1.ovh.infra.mout.ch
-          - gate-2.ovh.infra.mout.ch
   interfaces:
   - ^ens[0-9]+
   externalIPs: true
