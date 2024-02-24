@@ -46,12 +46,12 @@ spec:
                   type: ClusterIP
                   externalIPs:
                     - {{ printf "'{{.ip}}'" }}
-                  port: 28967
+                  port: {{ printf "'{{.port}}'" }}
                 quic:
                   type: ClusterIP
                   externalIPs:
                     - {{ printf "'{{.ip}}'" }}
-                  port: 28967
+                  port: {{ printf "'{{.port}}'" }}
                   protocol: UDP
               identity:
                 vaultSecret:
