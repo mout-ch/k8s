@@ -12,7 +12,7 @@ spec:
       - key: kubernetes.io/hostname
         operator: In
         values:
-          - gate-1.ovh.infra.mout.ch
+          #- gate-1.ovh.infra.mout.ch
   interfaces:
   - ^ens[0-9]+
   externalIPs: true
