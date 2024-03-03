@@ -17,3 +17,20 @@ The k3s cluster is part of mout.ch infrastructure where provides a consul and ce
 ### Secrets
 
 The secrets are stored in vault and then injected into k8s with [vault-secret-operator](https://github.com/ricoberger/vault-secrets-operator). These are essentially services external to the cluster that go through vault, such as tokens to access email or the gitlab registry. See [Access a private docker registry with vault-secret-operator's help ](https://blog.kelbert.fr/posts/acces-private-docker-registry-with-vault-secret-operator-s-help/).
+
+```
+helm upgrade --install --version 1.15.1 cilium cilium/cilium \
+   --namespace cilium \
+   --set operator.replicas=1 \
+   --set l2announcements.enabled=true \
+   --set kubeProxyReplacement=true \
+   --set k8sClientRateLimit.qps=50 \
+   --set k8sClientRateLimit.burst=100 \
+   --set k8sServiceHost=192.168.14.21\
+   --set k8sServicePort=6443 \
+   --set l2announcements.leaseDuration=20s \
+   --set l2announcements.leaseRenewDeadline=15s \
+   --set l2announcements.leaseRetryPeriod=200ms \
+   --set bgpControlPlane.enabled=false
+
+```
