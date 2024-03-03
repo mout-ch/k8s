@@ -24,6 +24,7 @@ spec:
               - /var/lib/rancher/k3s/storage
           - node: compute-2.blotzheim.infra.mout.ch
             paths:
+              - /var/lib/rancher/k3s/storage
               - /mnt/storj-0
               - /mnt/storj-1
               - /mnt/storj-2
