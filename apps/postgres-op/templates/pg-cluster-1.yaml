@@ -24,6 +24,6 @@ spec:
     cocovoit: cocovoit.cocovoit
     epibank: epibank.epibank
     simone: simone.simone
-    authentik: authentik.authentik
+    goauthentik: goauthentik.goauthentik
   postgresql:
     version: "14"

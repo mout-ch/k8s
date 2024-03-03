@@ -3,6 +3,6 @@ authentik:
   secret_key: 1234
   postgresql:
     host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
-    name: authentik
-    user: authentik.authentik
+    name: goauthentik
+    user: goauthentik.goauthentik
     password: passw0rd
