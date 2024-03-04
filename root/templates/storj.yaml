@@ -36,7 +36,7 @@ spec:
               config:
                 wallet: 0xF94170f9a892F20775eEd3141233819A732005A3
                 email: pierre.kelbert+storj@gmail.com
-                address: {{ printf "'{{.ip}}:28967'" }}
+                address: {{ printf "'{{.ip}}:{{.port}}'" }}
                 storage: {{ printf "'{{.size}}'" }}
               service:
                 storagenode:
