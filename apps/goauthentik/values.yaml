@@ -49,7 +49,13 @@ authentik:
       - name: postgres-creds
         secret:
           secretName: goauthentik.goauthentik.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+      - name: goauthentik-creds
+        secret:
+          secretName: goauthentik-creds
     volumeMounts:
       - name: postgres-creds
         mountPath: /postgres-creds
+        readOnly: true
+      - name: goauthentik-creds
+        mountPath: /goauthentik-creds
         readOnly: true
