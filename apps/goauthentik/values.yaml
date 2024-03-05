@@ -23,6 +23,23 @@ authentik:
       - name: goauthentik-creds
         mountPath: /goauthentik-creds
         readOnly: true
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+        traefik.ingress.kubernetes.io/redirect-permanent: "true"
+        traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+      https: true
+      hosts:
+        - auth.kelbert.fr
+      tls:
+        - hosts:
+          - auth.kelbert.fr
+          secretName: auth.kelbert.fr-tls
+
   worker:
     volumes:
       - name: postgres-creds
