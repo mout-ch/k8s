@@ -1,0 +1,25 @@
+---
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: theater-1-cluster
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+spec:
+  type: Opaque
+  path: mout.ch/k3s/theater-1.magstatt.infra.mout.ch
+
+  templates:
+    name: theater-1.magstatt
+    server: https://theater-1.magstatt.infra.mout.ch
+    config: |
+        {
+            "tlsClientConfig": {
+                "caData": "{% .Secrets.ca | b64enc %}",
+                "certData": "{% .Secrets.cert | b64enc %}",
+                "insecure": false,
+                "keyData": "{% .Secrets.key | b64enc %}",
+                "serverName": "theater-1.magstatt.infra.mout.ch"
+            }
+        }
