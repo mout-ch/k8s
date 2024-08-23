@@ -1,0 +1,29 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-path-theater-1
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://theater-1.magstatt.infra.mout.ch
+    namespace: local-path
+  project: default
+  syncPolicy: {}
+  source:
+    path: deploy/chart/local-path-provisioner
+    repoURL: https://github.com/rootmout/local-path-provisioner
+    targetRevision: 7854852da3965ddf85f5d67965e6e3162f6c6248
+    helm:
+      values: |
+        nodePathMap:
+          - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+            paths:
+              - /var/lib/volumes/k3s-local-path
+        storageClass:
+          create: true
+          defaultClass: true
+          parameters:
+            nodePath: /var/lib/volumes/k3s-local-path
