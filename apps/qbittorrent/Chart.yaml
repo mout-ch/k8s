@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: qbittorrent
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: qbittorrent
+    version: 0.3.6
+    repository: https://charts.gabe565.com

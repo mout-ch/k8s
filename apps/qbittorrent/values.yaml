@@ -1,0 +1,47 @@
+---
+qbittorrent:
+  service:
+    main:
+      ports:
+        http:
+          port: 8080
+    bittorrent:
+      enabled: true
+      ports:
+        bittorrent:
+          enabled: true
+          port: 6881
+          protocol: TCP
+
+  ingress:
+    # -- Enable and configure ingress settings for the chart under this key.
+    # @default -- See [values.yaml](./values.yaml)
+    main:
+      enabled: false
+      # hosts:
+      #   - host: chart-example.local
+      #     paths:
+      #       - path: /
+      # tls:
+      #   - secretName: chart-example.local-tls
+      #     hosts:
+      #       - chart-example.local
+
+  # -- Configure persistence settings for the chart under this key.
+  # Set `enabled` to `true' to create persistant volumes for each of these.
+  # @default -- See values.yaml
+  persistence:
+    # Configuration files
+    config:
+      enabled: true
+      retain: true
+      storageClass: local-path
+      accessMode: ReadWriteOnce
+      size: 1Gi
+
+    # Optional - Allows linking to an existing media library scraping location.
+    media:
+      enabled: true
+      mountPath: /media
+      size: 1T
+      existingClaim: media
