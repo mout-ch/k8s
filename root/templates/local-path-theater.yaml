@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    server: https://theater-1.magstatt.infra.mout.ch
+    name: theater-1.magstatt
     namespace: local-path
   project: default
   syncPolicy: {}
