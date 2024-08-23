@@ -12,7 +12,7 @@ spec:
 
   templates:
     name: theater-1.magstatt
-    server: https://theater-1.magstatt.infra.mout.ch
+    server: https://theater-1.magstatt.infra.mout.ch:6443
     config: |
         {
             "tlsClientConfig": {
