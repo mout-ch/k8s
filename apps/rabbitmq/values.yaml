@@ -3,7 +3,7 @@ rabbitmq:
   auth:
     username: rabbitmq
     existingPasswordSecret: rabbitmq-auth
-    existingPasswordKey: password
+    existingSecretPasswordKey: password
   resources:
     requests:
       memory: "512Mi"
