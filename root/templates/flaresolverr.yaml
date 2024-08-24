@@ -1,0 +1,24 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flaresolverr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: theater-1.magstatt
+    namespace: flaresolverr
+  project: default
+  syncPolicy: {}
+  source:
+    chart: flaresolverr
+    repoURL: https://k8s-at-home.com/charts/
+    targetRevision: 5.4.2
+    helm:
+      valuesObject:
+        image:
+          repository: flaresolverr/flaresolverr
+          pullPolicy: IfNotPresent
+          tag: v3.3.21
