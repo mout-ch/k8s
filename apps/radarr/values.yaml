@@ -1,5 +1,10 @@
 ---
 radarr:
+  image:
+    repository: ghcr.io/linuxserver/radarr
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 5.10.0-nightly
   service:
     type: ClusterIP
     port: 80
