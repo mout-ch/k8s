@@ -1,0 +1,18 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: radarr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: theater-1.magstatt
+    namespace: radarr
+  project: default
+  source:
+    path: apps/radarr
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
+  syncPolicy: {}

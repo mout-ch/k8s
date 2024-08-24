@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: radarr
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: radarr
+    version: 0.1.7
+    repository: https://panzer1119.github.io/helm-charts

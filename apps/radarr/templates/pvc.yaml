@@ -12,3 +12,18 @@ spec:
       storage: 1T
   volumeName: "media-{{ .Release.Name }}"
   storageClassName: "{{ .Release.Name }}-media"
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
