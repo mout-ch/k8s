@@ -1,0 +1,15 @@
+---
+vault-secrets-operator:
+  vault:
+    address: http://192.168.14.10:8200/
+  environmentVars:
+  - name: VAULT_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: vault-secrets-operator
+        key: VAULT_TOKEN
+  - name: VAULT_TOKEN_LEASE_DURATION
+    valueFrom:
+      secretKeyRef:
+        name: vault-secrets-operator
+        key: VAULT_TOKEN_LEASE_DURATION
