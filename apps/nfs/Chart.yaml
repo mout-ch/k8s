@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: nfs
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: nfs-server
+    version: 1.1.2
+    repository: https://charts.obeone.cloud

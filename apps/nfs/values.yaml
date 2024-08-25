@@ -1,0 +1,57 @@
+---
+nfs-server:
+  service:
+    main:
+      enabled: true
+      type: NodePort
+      ports:
+        http:
+          enabled: false
+        nfs-111:
+          enabled: true
+          port: 111
+          protocol: TCP
+        nfsd:
+          enabled: true
+          primary: true
+          port: 2049
+          protocol: TCP
+        nfs-32765:
+          enabled: true
+          port: 32765
+          protocol: TCP
+        nfs-32767:
+          enabled: true
+          port: 32767
+          protocol: TCP
+
+    udp:
+      enabled: true
+      type: NodePort
+      ports:
+        nfs-111-udp:
+          enabled: true
+          port: 111
+          protocol: UDP
+        nfsd-udp:
+          enabled: true
+          port: 2049
+          protocol: UDP
+        nfs-32765-udp:
+          enabled: true
+          port: 32765
+          protocol: UDP
+        nfs-32767-udp:
+          enabled: true
+          port: 32767
+          protocol: UDP
+
+
+  # -- Configure persistence settings for the chart under this key.
+  # @default -- See values.yaml
+  persistence:
+    shared:
+      enabled: true
+      mountPath: /shared
+      existingClaim: media
+      storageClass: nfs-media
