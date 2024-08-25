@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: jellyfin
+description: <optionnal>
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: jellyfin
+    version: 0.3.0
+    repository: https://rootmout.github.io/jellyfin-helm/
