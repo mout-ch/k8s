@@ -52,6 +52,7 @@ nfs-server:
   persistence:
     shared:
       enabled: true
+      type: pvc
       mountPath: /shared
       existingClaim: media
       storageClass: nfs-media
