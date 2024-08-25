@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: mosquitto
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: mosquitto
+    version: 1.0.5
+    repository: https://rootmout.github.io/naps-helm-charts/
