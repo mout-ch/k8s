@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    server: https://kubernetes.default.svc
+    name: theater-1.magstatt
     namespace: mosquitto
   project: default
   source:
