@@ -26,3 +26,21 @@ spec:
             enabled: true
             size: 1Gi
             storageClass: local-path
+
+        ingress:
+          main:
+            enabled: true
+            className: ""
+            annotations: { }
+            # kubernetes.io/ingress.class: nginx
+            # kubernetes.io/tls-acme: "true"
+            hosts:
+              - host: jackett.theater.kelbert.fr
+                paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                      service:
+                        name: jackett
+                        port:
+                          number: 9117
