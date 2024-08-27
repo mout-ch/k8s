@@ -19,8 +19,8 @@ spec:
     helm:
       valuesObject:
         image:
-          repository: linuxserver/jackett
-          tag: 0.22.474
+          repository: ghcr.io/hotio/jackett
+          tag: release-0.22.526
         persistence:
           config:
             enabled: true
