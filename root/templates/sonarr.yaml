@@ -1,0 +1,18 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: theater-1.magstatt
+    namespace: sonarr
+  project: default
+  source:
+    path: apps/sonarr
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
+  syncPolicy: {}

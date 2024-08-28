@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: sonarr
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: sonarr
+    version: 0.1.8
+    repository: https://panzer1119.github.io/helm-charts
