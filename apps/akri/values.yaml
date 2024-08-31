@@ -1,0 +1,6 @@
+---
+akri:
+  kubernetesDistro: k3s # Specify Kubernetes distro here: k3s|microk8s|k8s
+  udev:
+    discovery:
+      enabled: true

@@ -1,0 +1,12 @@
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: akri-dmx-controller
+spec:
+  capacity: 1
+  discoveryHandler:
+    discoveryDetails: |
+      groupRecursive: true # Recommended unless using very exact udev rules
+      udevRules:
+      - ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001"
+    name: udev
