@@ -7,7 +7,7 @@ metadata:
 spec:
   teamId: "mout-ch"
   volume:
-    size: 30Gi
+    size: 40Gi
     storageClass: csi-rbd-sc
   numberOfInstances: 2
   users:
