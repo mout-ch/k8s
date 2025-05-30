@@ -1,5 +1,7 @@
 ---
 jellyfin:
+  image:
+    tag: 10.10.7
   service:
     type: NodePort
     port: 8096
