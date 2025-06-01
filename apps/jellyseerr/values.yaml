@@ -1,0 +1,44 @@
+---
+jellyseerr:
+  workload:
+    main:
+      podSpec:
+        containers:
+          main:
+            env:
+              TZ: "Europe/Zurich"
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+
+  service:
+    main:
+      ports:
+        main:
+          port: 5055
+          protocol: http
+
+  ingress:
+    main:
+      enabled: true
+      hosts:
+        - host: jellyseerr.theater.kelbert.fr
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                name: main
+                port: 5055
+      tls: []
+
+  persistence:
+    config:
+      enabled: true
+      type: pvc
+      storageClass: local-path
+      size: 1Gi
+      retain: true
