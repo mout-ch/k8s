@@ -8,17 +8,18 @@ jellyfin:
     nodePort: 30010
 
   ingress:
-    enabled: false
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
     path: /
     hosts:
-      - chart-example.local
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+      - jellyfin.theater.kelbert.fr
+    tls:
+      - secretName: jellyfin-theater-kelbert-fr-tls
+        hosts:
+          - jellyfin.theater.kelbert.fr
 
   persistence:
     config:
