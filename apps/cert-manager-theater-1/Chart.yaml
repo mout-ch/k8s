@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: cert-manager-theater-1
+description: Cert manager helm chart for theater-1 cluster
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: cert-manager
+    version: v1.13.3
+    repository: https://charts.jetstack.io

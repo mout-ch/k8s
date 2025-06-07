@@ -1,0 +1,8 @@
+---
+cert-manager:
+  installCRDs: true
+  global:
+    leaderElection:
+      namespace: cert-manager
+  webhook:
+    timeoutSeconds: 30

@@ -25,6 +25,10 @@ jellyseerr:
   ingress:
     main:
       enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
       hosts:
         - host: jellyseerr.theater.kelbert.fr
           paths:
@@ -33,7 +37,10 @@ jellyseerr:
               service:
                 name: main
                 port: 5055
-      tls: []
+      tls:
+        - secretName: jellyseerr-theater-kelbert-fr-tls
+          hosts:
+            - jellyseerr.theater.kelbert.fr
 
   persistence:
     config:
