@@ -1,5 +1,5 @@
 ---
-jellyseerr:
+jellyseerr-chart:
   workload:
     main:
       podSpec:
