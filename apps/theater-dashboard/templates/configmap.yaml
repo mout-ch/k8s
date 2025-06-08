@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: theater-dashboard-html
+  namespace: theater-dashboard
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Theater Dashboard</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .dashboard-card {
+                backdrop-filter: blur(10px);
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 20px;
+                transition: all 0.3s ease;
+            }
+            .dashboard-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                background: rgba(255, 255, 255, 0.2);
+            }
+            .app-button {
+                text-decoration: none;
+                color: white;
+                display: block;
+                padding: 2rem;
+                border-radius: 15px;
+                transition: all 0.3s ease;
+            }
+            .app-button:hover {
+                color: white;
+                text-decoration: none;
+            }
+            .app-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                color: #fff;
+            }
+            .app-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+            .app-description {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+            .main-title {
+                color: white;
+                text-align: center;
+                margin-bottom: 3rem;
+                font-weight: 700;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .jellyfin { background: linear-gradient(135deg, #00a4dc, #0078d4); }
+            .jellyseerr { background: linear-gradient(135deg, #7c4dff, #3f51b5); }
+            .radarr { background: linear-gradient(135deg, #ffc107, #ff9800); }
+            .sonarr { background: linear-gradient(135deg, #35a7ff, #1976d2); }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <h1 class="main-title mt-5 mb-5">
+                        <i class="fas fa-film me-3"></i>Theater Dashboard
+                    </h1>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="dashboard-card h-100">
+                                <a href="https://jellyfin.theater.kelbert.fr" class="app-button jellyfin h-100 d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-play-circle app-icon"></i>
+                                    <div class="app-title">Jellyfin</div>
+                                    <div class="app-description">Media Server</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="dashboard-card h-100">
+                                <a href="https://jellyseerr.theater.kelbert.fr" class="app-button jellyseerr h-100 d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-search app-icon"></i>
+                                    <div class="app-title">Jellyseerr</div>
+                                    <div class="app-description">Request Manager</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="dashboard-card h-100">
+                                <a href="https://radarr.theater.kelbert.fr" class="app-button radarr h-100 d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-film app-icon"></i>
+                                    <div class="app-title">Radarr</div>
+                                    <div class="app-description">Movie Manager</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-3">
+                            <div class="dashboard-card h-100">
+                                <a href="https://sonarr.theater.kelbert.fr" class="app-button sonarr h-100 d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-tv app-icon"></i>
+                                    <div class="app-title">Sonarr</div>
+                                    <div class="app-description">TV Show Manager</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <p class="text-white-50">
+                            <i class="fas fa-server me-2"></i>
+                            Powered by Kubernetes on theater-1.magstatt
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>

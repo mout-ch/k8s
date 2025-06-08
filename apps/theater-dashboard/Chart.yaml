@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: theater-dashboard
+description: A simple dashboard for theater applications
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

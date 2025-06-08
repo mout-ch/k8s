@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: theater-dashboard-theater-1
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: theater-1.magstatt
+    namespace: theater-dashboard
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    path: apps/theater-dashboard
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
