@@ -78,6 +78,7 @@ data:
             .jellyseerr { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
             .radarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
             .sonarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
+            .jackett { background: linear-gradient(135deg, #4a5568, #2d3748); }
             
             /* Admin Tools Styling */
             .admin-section {
@@ -163,6 +164,16 @@ data:
                                     <i class="fas fa-tv admin-icon"></i>
                                     <div class="admin-title">Sonarr</div>
                                     <div class="admin-description">TV Shows</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-6">
+                            <div class="dashboard-card admin-card">
+                                <a href="https://jackett.theater.kelbert.fr" class="app-button jackett admin-button d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-search admin-icon"></i>
+                                    <div class="admin-title">Jackett</div>
+                                    <div class="admin-description">Indexers</div>
                                 </a>
                             </div>
                         </div>
