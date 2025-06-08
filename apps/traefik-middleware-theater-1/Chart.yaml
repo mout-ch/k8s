@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: traefik-middleware-theater-1
+description: Traefik middleware for theater-1 cluster
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

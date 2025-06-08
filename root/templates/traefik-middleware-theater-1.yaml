@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik-middleware-theater-1
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: theater-1.magstatt
+    namespace: kube-system
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    path: apps/traefik-middleware-theater-1
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
