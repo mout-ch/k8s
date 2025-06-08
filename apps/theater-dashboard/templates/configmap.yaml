@@ -16,21 +16,22 @@ data:
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <style>
             body {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
                 min-height: 100vh;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             .dashboard-card {
-                backdrop-filter: blur(10px);
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(15px);
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.15);
                 border-radius: 20px;
-                transition: all 0.3s ease;
+                transition: all 0.4s ease;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
             .dashboard-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                background: rgba(255, 255, 255, 0.2);
+                transform: translateY(-8px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+                background: rgba(255, 255, 255, 0.15);
             }
             .app-button {
                 text-decoration: none;
@@ -38,7 +39,7 @@ data:
                 display: block;
                 padding: 2rem;
                 border-radius: 15px;
-                transition: all 0.3s ease;
+                transition: all 0.4s ease;
             }
             .app-button:hover {
                 color: white;
@@ -56,19 +57,55 @@ data:
             }
             .app-description {
                 font-size: 0.9rem;
-                opacity: 0.8;
+                opacity: 0.9;
             }
             .main-title {
                 color: white;
                 text-align: center;
                 margin-bottom: 3rem;
                 font-weight: 700;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             }
-            .jellyfin { background: linear-gradient(135deg, #00a4dc, #0078d4); }
-            .jellyseerr { background: linear-gradient(135deg, #7c4dff, #3f51b5); }
-            .radarr { background: linear-gradient(135deg, #ffc107, #ff9800); }
-            .sonarr { background: linear-gradient(135deg, #35a7ff, #1976d2); }
+            .section-title {
+                color: #e0e6ed;
+                font-size: 1.3rem;
+                font-weight: 600;
+                margin-bottom: 1.5rem;
+                text-align: center;
+                opacity: 0.9;
+            }
+            .jellyfin { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+            .jellyseerr { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+            .radarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
+            .sonarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
+            
+            /* Admin Tools Styling */
+            .admin-section {
+                font-size: 1.1rem;
+                opacity: 0.8;
+            }
+            .admin-card {
+                height: 150px;
+            }
+            .admin-button {
+                padding: 1rem;
+            }
+            .admin-icon {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+                color: #a0aec0;
+            }
+            .admin-title {
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin-bottom: 0.2rem;
+                color: #e2e8f0;
+            }
+            .admin-description {
+                font-size: 0.75rem;
+                opacity: 0.7;
+                color: #a0aec0;
+            }
         </style>
     </head>
     <body>
@@ -79,49 +116,59 @@ data:
                         <i class="fas fa-film me-3"></i>Theater Dashboard
                     </h1>
                     
-                    <div class="row g-4">
-                        <div class="col-md-6 col-lg-3">
+                    <!-- Media Services Section -->
+                    <h2 class="section-title">
+                        <i class="fas fa-play me-2"></i>Media Services
+                    </h2>
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
                             <div class="dashboard-card h-100">
                                 <a href="https://jellyfin.theater.kelbert.fr" class="app-button jellyfin h-100 d-flex flex-column justify-content-center align-items-center">
                                     <i class="fas fa-play-circle app-icon"></i>
                                     <div class="app-title">Jellyfin</div>
-                                    <div class="app-description">Media Server</div>
+                                    <div class="app-description">Media Server & Streaming</div>
                                 </a>
                             </div>
                         </div>
                         
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6">
                             <div class="dashboard-card h-100">
                                 <a href="https://jellyseerr.theater.kelbert.fr" class="app-button jellyseerr h-100 d-flex flex-column justify-content-center align-items-center">
                                     <i class="fas fa-search app-icon"></i>
                                     <div class="app-title">Jellyseerr</div>
-                                    <div class="app-description">Request Manager</div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="dashboard-card h-100">
-                                <a href="https://radarr.theater.kelbert.fr" class="app-button radarr h-100 d-flex flex-column justify-content-center align-items-center">
-                                    <i class="fas fa-film app-icon"></i>
-                                    <div class="app-title">Radarr</div>
-                                    <div class="app-description">Movie Manager</div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-3">
-                            <div class="dashboard-card h-100">
-                                <a href="https://sonarr.theater.kelbert.fr" class="app-button sonarr h-100 d-flex flex-column justify-content-center align-items-center">
-                                    <i class="fas fa-tv app-icon"></i>
-                                    <div class="app-title">Sonarr</div>
-                                    <div class="app-description">TV Show Manager</div>
+                                    <div class="app-description">Request & Discover Content</div>
                                 </a>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="text-center mt-5">
+                    <!-- Admin Tools Section -->
+                    <h2 class="section-title admin-section">
+                        <i class="fas fa-tools me-2"></i>Admin Tools
+                    </h2>
+                    <div class="row g-3 mb-5 justify-content-center">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="dashboard-card admin-card">
+                                <a href="https://radarr.theater.kelbert.fr" class="app-button radarr admin-button d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-film admin-icon"></i>
+                                    <div class="admin-title">Radarr</div>
+                                    <div class="admin-description">Movies</div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-6">
+                            <div class="dashboard-card admin-card">
+                                <a href="https://sonarr.theater.kelbert.fr" class="app-button sonarr admin-button d-flex flex-column justify-content-center align-items-center">
+                                    <i class="fas fa-tv admin-icon"></i>
+                                    <div class="admin-title">Sonarr</div>
+                                    <div class="admin-description">TV Shows</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
                         <p class="text-white-50">
                             <i class="fas fa-server me-2"></i>
                             Powered by Kubernetes on theater-1.magstatt
