@@ -13,7 +13,7 @@ renovate:
   stage: maintenance
   image: renovate/renovate
   script:
-    - renovate
+    - renovate --gitlab-project "$CI_PROJECT_PATH" --autodiscover=false
   variables:
     RENOVATE_TOKEN: "$RENOVATE_TOKEN"
     RENOVATE_PLATFORM: "gitlab"

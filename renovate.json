@@ -7,7 +7,6 @@
     ":automergeBranch"
   ],
   "includeForks": true,
-  "autodiscover": true,
   "timezone": "Europe/Zurich",
   "schedule": ["before 6am on weekdays"],
   "labels": ["dependencies"],
