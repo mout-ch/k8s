@@ -8,7 +8,7 @@
   ],
   "includeForks": true,
   "timezone": "Europe/Zurich",
-  "schedule": ["before 6am on weekdays"],
+  "schedule": ["* 0-5 * * 1-5"],
   "labels": ["dependencies"],
   "commitMessagePrefix": "chore(deps): ",
   "prConcurrentLimit": 10,
@@ -45,7 +45,7 @@
       "matchPackageNames": ["argo-cd", "authentik", "vault-secrets-operator"],
       "groupName": "infrastructure",
       "labels": ["infrastructure"],
-      "schedule": ["before 4am on sunday"]
+      "schedule": ["* 0-3 * * 0"]
     },
     {
       "description": "Media stack updates",
@@ -59,7 +59,7 @@
       "matchPackageNames": ["minecraft"],
       "groupName": "minecraft",
       "labels": ["minecraft"],
-      "schedule": ["before 6am on saturday"]
+      "schedule": ["* 0-5 * * 6"]
     }
   ],
   "helm-values": {
