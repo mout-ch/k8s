@@ -13,7 +13,9 @@ renovate:
   stage: maintenance
   image: renovate/renovate
   script:
-    - renovate --gitlab-project "$CI_PROJECT_PATH" --autodiscover=false
+    - echo "Repository path:" && pwd && ls -la
+    - echo "Looking for renovate config..." && ls -la renovate.json || echo "renovate.json not found"
+    - renovate $CI_PROJECT_PATH
   variables:
     RENOVATE_TOKEN: "$RENOVATE_TOKEN"
     RENOVATE_PLATFORM: "gitlab"
