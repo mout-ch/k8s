@@ -18,3 +18,15 @@ stages:
 - test
 sast:
   stage: test
+
+renovate:
+  image: renovate/renovate
+  script:
+    - renovate
+  variables:
+    RENOVATE_TOKEN: "$RENOVATE_TOKEN"
+    RENOVATE_PLATFORM: "gitlab"
+    RENOVATE_ENDPOINT: "https://gitlab.com/api/v4"
+    LOG_LEVEL: "debug"
+  only:
+    - schedules
