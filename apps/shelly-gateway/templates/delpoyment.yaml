@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: shelly-gateway
-          image: ghcr.io/lesuisse/shelly-ht-action-prometheus:0.3.1
+          image: ghcr.io/lesuisse/shelly-ht-action-prometheus:0.3.6
           ports:
             - name: http
               containerPort: 17795
