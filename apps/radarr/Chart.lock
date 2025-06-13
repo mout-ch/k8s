@@ -1,0 +1,6 @@
+dependencies:
+- name: radarr
+  repository: https://panzer1119.github.io/helm-charts
+  version: 0.1.7
+digest: sha256:491be3912f73c7a888d2748fe9accaa49b3849bc7a8c63437461595aaf280332
+generated: "2025-06-14T01:10:02.836660665+02:00"

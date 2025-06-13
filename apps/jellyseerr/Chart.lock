@@ -1,0 +1,6 @@
+dependencies:
+- name: jellyseerr-chart
+  repository: oci://ghcr.io/fallenbagel/jellyseerr
+  version: 2.5.0
+digest: sha256:9294b7d53c99799f798c01b745358b7ee5c5d21054dd887380cae10f67d2119a
+generated: "2025-06-14T01:08:09.699051898+02:00"
