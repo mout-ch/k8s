@@ -34,7 +34,7 @@ minecraft:
 
   sidecarContainers:
     - name: exporter
-      image: ghcr.io/dirien/minecraft-exporter:0.17.1
+      image: ghcr.io/dirien/minecraft-exporter:0.21.0
       volumeMounts:
         - mountPath: /minecraft/world
           name: datadir
