@@ -1,112 +1,141 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits",
     ":automergeDigest",
     ":automergeBranch"
   ],
-  "includeForks": true,
+  "forkProcessing": "enabled",
   "timezone": "Europe/Zurich",
-  "schedule": ["* 0-5 * * 1-5"],
-  "labels": ["dependencies"],
+  "schedule": [
+    "* 0-5 * * 1-5"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "commitMessagePrefix": "chore(deps): ",
   "prConcurrentLimit": 10,
   "prHourlyLimit": 2,
   "packageRules": [
     {
       "description": "Group Helm chart dependencies",
-      "matchManagers": ["helm-values", "helmv3"],
+      "matchManagers": [
+        "helm-values",
+        "helmv3"
+      ],
       "groupName": "helm-charts",
       "commitMessageTopic": "Helm charts"
     },
     {
       "description": "Group Docker images in Kubernetes manifests",
-      "matchManagers": ["kubernetes"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "kubernetes"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "k8s-images",
       "commitMessageTopic": "Kubernetes images"
     },
     {
       "description": "Auto-merge patch and digest updates",
-      "matchUpdateTypes": ["digest", "patch"],
+      "matchUpdateTypes": [
+        "digest",
+        "patch"
+      ],
       "automerge": true,
       "automergeType": "branch"
     },
     {
       "description": "Critical security updates",
-      "matchPackageNames": ["cert-manager", "prometheus", "grafana"],
-      "matchUpdateTypes": ["major"],
-      "labels": ["security", "major-update"],
+      "matchPackageNames": [
+        "cert-manager",
+        "prometheus",
+        "grafana"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "security",
+        "major-update"
+      ],
       "reviewersFromCodeOwners": true
     },
     {
       "description": "ArgoCD and infrastructure tools",
-      "matchPackageNames": ["argo-cd", "authentik", "vault-secrets-operator"],
+      "matchPackageNames": [
+        "argo-cd",
+        "authentik",
+        "vault-secrets-operator"
+      ],
       "groupName": "infrastructure",
-      "labels": ["infrastructure"],
-      "schedule": ["* 0-3 * * 0"]
+      "labels": [
+        "infrastructure"
+      ],
+      "schedule": [
+        "* 0-3 * * 0"
+      ]
     },
     {
       "description": "Media stack updates",
-      "matchPackageNames": ["jellyfin", "jellyseerr", "radarr", "sonarr", "jackett", "qbittorrent", "adguard-home"],
+      "matchPackageNames": [
+        "jellyfin",
+        "jellyseerr",
+        "radarr",
+        "sonarr",
+        "jackett",
+        "qbittorrent",
+        "adguard-home"
+      ],
       "groupName": "media-stack",
-      "labels": ["media-stack"],
+      "labels": [
+        "media-stack"
+      ],
       "commitMessageTopic": "Media stack"
     },
     {
       "description": "Minecraft servers",
-      "matchPackageNames": ["minecraft"],
+      "matchPackageNames": [
+        "minecraft"
+      ],
       "groupName": "minecraft",
-      "labels": ["minecraft"],
-      "schedule": ["* 0-5 * * 6"]
+      "labels": [
+        "minecraft"
+      ],
+      "schedule": [
+        "* 0-5 * * 6"
+      ]
     }
   ],
   "helm-values": {
-    "fileMatch": ["\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/\\.ya?ml$/"
+    ]
   },
   "helmv3": {
-    "fileMatch": ["(^|/)Chart\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/(^|/)Chart\\.ya?ml$/"
+    ]
   },
   "kubernetes": {
-    "fileMatch": ["\\.ya?ml$"],
+    "managerFilePatterns": [
+      "/\\.ya?ml$/"
+    ],
     "ignorePaths": [
       "**/templates/**",
       "**/charts/**"
     ]
   },
-  "regexManagers": [
-    {
-      "description": "Update targetRevision in ArgoCD Applications",
-      "fileMatch": ["^root/templates/.*\\.ya?ml$"],
-      "matchStrings": [
-        "repoURL: https://(?<depName>[^/]+/[^/]+)\\.git\\s+targetRevision: (?<currentValue>.+)"
-      ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "semver"
-    },
-    {
-      "description": "Update Helm chart versions in ArgoCD Applications",
-      "fileMatch": ["^root/templates/.*\\.ya?ml$"],
-      "matchStrings": [
-        "chart: (?<depName>[^\\s]+)\\s+repoURL: (?<registryUrl>[^\\s]+)\\s+targetRevision: (?<currentValue>[^\\s]+)"
-      ],
-      "datasourceTemplate": "helm"
-    },
-    {
-      "description": "Update container images in Kubernetes manifests",
-      "fileMatch": ["^apps/.*/templates/.*\\.ya?ml$"],
-      "matchStrings": [
-        "image: (?<depName>[^:]+):(?<currentValue>[^\\s]+)"
-      ],
-      "datasourceTemplate": "docker"
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update Git commit hashes in ArgoCD Applications", 
-      "fileMatch": ["^root/templates/.*\\.ya?ml$"],
+      "description": "Update Git commit hashes in ArgoCD Applications",
+      "managerFilePatterns": [
+        "/^root/templates/.*\\.ya?ml$/"
+      ],
       "matchStrings": [
         "repoURL: https://github\\.com/(?<depName>[^/]+/[^/]+)\\s+targetRevision: (?<currentValue>[a-f0-9]{40})"
       ],
@@ -118,7 +147,12 @@
     "ghcr.io/hotio/jackett"
   ],
   "vulnerabilityAlerts": {
-    "labels": ["security", "vulnerability"],
-    "assignees": ["@rootmout"]
+    "labels": [
+      "security",
+      "vulnerability"
+    ],
+    "assignees": [
+      "@rootmout"
+    ]
   }
 }
