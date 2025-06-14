@@ -7,5 +7,5 @@ version: 0.1.0
 
 dependencies:
   - name: qbittorrent
-    version: 0.3.6
+    version: 0.4.1
     repository: https://charts.gabe565.com
