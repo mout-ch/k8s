@@ -1,0 +1,6 @@
+dependencies:
+- name: vault-secrets-operator
+  repository: https://ricoberger.github.io/helm-charts
+  version: 2.7.0
+digest: sha256:89ed8461fef53c411d79369facfd5abd98900d752edaa9b2d65c7e3516beab6e
+generated: "2025-06-14T02:33:45.483619449+02:00"
