@@ -2,7 +2,7 @@
 authentik:
   global:
     image:
-      tag: 2023.10.7 # Latest contain a bug in db migration
+      tag: 2025.6.1
   authentik:
     secret_key: file:///goauthentik-creds/secret_key
     postgresql:
