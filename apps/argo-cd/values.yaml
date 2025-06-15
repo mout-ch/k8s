@@ -3,8 +3,7 @@ argo-cd:
     domain: argocd.infra.mout.ch
   configs:
     params:
-      server:
-        insecure: "true"
+      server.insecure: "true"
   dex:
     enabled: false
   server:
