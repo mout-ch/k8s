@@ -21,7 +21,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: {{ $.Values.appName }}
+              name: {{ $service.name }}-svc
               port:
                 number: {{ $service.port }}
   {{- end }}

@@ -1,17 +1,24 @@
+{{- range $key, $service := .Values.services }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.appName }}
+  name: {{ $service.name }}-svc
   labels:
-    app: {{ .Values.appName }}
+    app: {{ $.Values.appName }}
+    service: {{ $service.name }}
 spec:
+  type: ClusterIP
   ports:
-  {{- range $key, $service := .Values.services }}
   - name: {{ $service.name }}
     protocol: TCP
     port: {{ $service.port }}
-    targetPort: {{ $service.name }}
+    targetPort: {{ $service.port }}
+  {{- if $service.externalIPs }}
+  externalIPs:
+  {{- range $service.externalIPs }}
+  - {{ . }}
   {{- end }}
-  selector:
-    app: {{ .Values.appName }}
+  {{- end }}
+  # No selector - this makes it a headless service that we can control endpoints for
+{{- end }}
