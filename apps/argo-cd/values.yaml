@@ -18,6 +18,7 @@ argo-cd:
           url: https://argoproj.github.io/argo-helm
     ingress:
       enabled: true
+      tls: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
         kubernetes.io/ingress.class: traefik
