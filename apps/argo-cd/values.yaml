@@ -1,4 +1,6 @@
 argo-cd:
+  global:
+    domain: argocd.infra.mout.ch
   dex:
     enabled: false
   server:
@@ -21,14 +23,8 @@ argo-cd:
         traefik.ingress.kubernetes.io/redirect-permanent: "true"
         traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
       hosts:
-        - host: argocd.infra.mout.ch
-          paths:
-            - path: /
-              pathType: Prefix
-              service:
-                name: argocd-server
-                port: 443
+        - argocd.infra.mout.ch
       tls:
-        - secretName: argocd-infra-mout-ch-tls
-          hosts:
-            - argocd.infra.mout.ch
+        - hosts:
+          - argocd.infra.mout.ch
+          secretName: argocd.infra.mout.ch-tls
