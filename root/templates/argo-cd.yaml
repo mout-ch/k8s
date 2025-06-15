@@ -15,7 +15,10 @@ spec:
     path: apps/argo-cd
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
-  # syncPolicy: {}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 
 ---
 apiVersion: v1

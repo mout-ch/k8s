@@ -1,12 +1,8 @@
 argo-cd:
-  global:
-    image:
-      tag: v2.2.5
   dex:
     enabled: false
   server:
-    extraArgs:
-      - --insecure
+    # Removed --insecure flag for proper HTTPS support
     config:
       repositories: |
         - type: helm
@@ -18,12 +14,21 @@ argo-cd:
     ingress:
       enabled: true
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-staging
+        cert-manager.io/cluster-issuer: letsencrypt-prod
         kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+        traefik.ingress.kubernetes.io/redirect-permanent: "true"
         traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
       hosts:
-        - argocd.infra.mout.ch
+        - host: argocd.infra.mout.ch
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                name: argocd-server
+                port: 443
       tls:
-        - hosts:
-          - argocd.infra.mout.ch
-          secretName: argocd.infra.mout.ch-tls
+        - secretName: argocd-infra-mout-ch-tls
+          hosts:
+            - argocd.infra.mout.ch
