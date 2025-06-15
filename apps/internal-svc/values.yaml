@@ -1,1 +1,40 @@
 ---
+# Configuration for internal service redirects
+services:
+  vault:
+    name: vault
+    port: 8200
+    host: vault.infra.mout.ch
+    endpoints:
+      - ip: 192.168.14.10
+      - ip: 192.168.14.11
+      - ip: 192.168.14.12
+  
+  ceph:
+    name: ceph
+    port: 8080
+    host: ceph.infra.mout.ch
+    endpoints:
+      - ip: 192.168.14.10
+      - ip: 192.168.14.11
+      - ip: 192.168.14.12
+
+# Global settings
+namespace: default
+appName: internal-svc
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+  
+  tls:
+    enabled: true
+    issuer: letsencrypt-prod

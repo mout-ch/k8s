@@ -2,18 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: internal-svc
+  name: {{ .Values.appName }}
   labels:
-    app: internal-svc
+    app: {{ .Values.appName }}
 spec:
   ports:
-  - name: vault
+  {{- range $key, $service := .Values.services }}
+  - name: {{ $service.name }}
     protocol: TCP
-    port: 8200
-    targetPort: vault
-  - name: ceph
-    protocol: TCP
-    port: 8080
-    targetPort: ceph
+    port: {{ $service.port }}
+    targetPort: {{ $service.name }}
+  {{- end }}
   selector:
-    app: internal-svc
+    app: {{ .Values.appName }}
