@@ -16,5 +16,9 @@ prometheus:
           - 192.168.14.21:9100
           - 192.168.122.1:9100
           - 192.168.10.2:9100
+    - job_name: magstatt
+      static_configs:
+        - targets:
+          - theater-1.magstatt.infra.mout.ch:9100
   nodeExporter:
     enabled: false
