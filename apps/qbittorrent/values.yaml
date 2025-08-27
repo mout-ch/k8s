@@ -1,5 +1,9 @@
 ---
 qbittorrent:
+  env:
+    TZ: "Europe/Zurich"
+    PUID: 1000
+    PGID: 1000
   service:
     main:
       ports:
