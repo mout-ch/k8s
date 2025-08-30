@@ -1,0 +1,82 @@
+---
+home-assistant:
+  # -- environment variables.
+  # @default -- See below
+  env:
+    # -- Set the container timezone
+    TZ: "Europe/Zurich"
+
+  # -- Configures service settings for the chart.
+  # @default -- See values.yaml
+  service:
+    main:
+      ports:
+        http:
+          port: 8123
+
+  # -- Use a more recent Home Assistant image
+  image:
+    repository: ghcr.io/home-assistant/home-assistant
+    tag: "2025.8.3"
+    pullPolicy: IfNotPresent
+          
+  # -- Configure persistence settings for the chart under this key.
+  # @default -- See values.yaml
+  persistence:
+    config:
+      enabled: true
+      retain: true
+      storageClass: local-path
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      mountPath: /config
+
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  ingress:
+    main:
+      enabled: false
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+        traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+        traefik.ingress.kubernetes.io/redirect-permanent: "true"
+      hosts:
+        - host: home-assistant.theater.kelbert.fr
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - home-assistant.theater.kelbert.fr
+          secretName: home-assistant-theater-kelbert-fr-tls
+
+  # -- Configure resource requests and limits for the Home Assistant container
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+  # -- Configure Pod Security Context
+  securityContext:
+    privileged: true
+    
+  # -- Configure container security context
+  podSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    fsGroup: 0
+
+  # -- Node selection for pod assignment
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment
+  tolerations: []
+
+  # -- Affinity for pod assignment
+  affinity: {}

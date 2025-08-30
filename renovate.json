@@ -88,6 +88,7 @@
         "sonarr",
         "jackett",
         "qbittorrent",
+        "home-assistant",
         "adguard-home"
       ],
       "groupName": "media-stack",
