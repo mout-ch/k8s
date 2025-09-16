@@ -7,5 +7,5 @@ appVersion: "1.35.1"
 
 dependencies:
   - name: zigbee2mqtt
-    version: 1.41.0
+    version: 2.6.1
     repository: https://koenkk.github.io/zigbee2mqtt-chart/
