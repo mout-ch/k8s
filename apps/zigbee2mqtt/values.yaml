@@ -13,7 +13,8 @@ zigbee2mqtt:
     secrets:
       name: mqtt-account
     storage:
-      enabled: false
+      enabled: true
+      storageClassName: local-path
 
   service:
     type: ClusterIP
