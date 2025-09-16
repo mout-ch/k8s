@@ -76,7 +76,8 @@ zigbee2mqtt:
     frontend:
       host: 0.0.0.0
       port: 8080
-    homeassistant: true
+    homeassistant: 
+      enabled: true
     mqtt:
       base_topic: zigbee2mqtt
       include_device_information: true
