@@ -3,7 +3,7 @@ zigbee2mqtt:
   # Koenkk/zigbee2mqtt-chart configuration
   image:
     repository: koenkk/zigbee2mqtt
-    tag: "1.35.1"
+    tag: "2.6.1"
     pullPolicy: IfNotPresent
 
   env:
