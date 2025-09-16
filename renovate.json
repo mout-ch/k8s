@@ -89,6 +89,7 @@
         "jackett",
         "qbittorrent",
         "home-assistant",
+        "zigbee2mqtt",
         "adguard-home"
       ],
       "groupName": "media-stack",
