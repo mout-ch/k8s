@@ -1,0 +1,131 @@
+---
+zigbee2mqtt:
+  # -- environment variables.
+  # @default -- See below
+  env:
+    # -- Set the container timezone
+    TZ: "Europe/Zurich"
+    ZIGBEE2MQTT_DATA: /data
+
+  # -- Use latest Zigbee2MQTT image
+  image:
+    repository: koenkk/zigbee2mqtt
+    tag: "1.35.1"
+    pullPolicy: IfNotPresent
+
+  # -- Configures service settings for the chart.
+  # @default -- See values.yaml
+  service:
+    main:
+      ports:
+        http:
+          port: 8080
+
+  # -- Configure persistence settings for the chart under this key.
+  # @default -- See values.yaml
+  persistence:
+    data:
+      enabled: true
+      retain: true
+      storageClass: local-path
+      accessMode: ReadWriteOnce
+      size: 1Gi
+      mountPath: /data
+
+  extraVolumes:
+    - name: mqtt-account
+      secret:
+        secretName: mqtt-account
+
+  extraVolumeMounts:
+    - name: mqtt-account
+      mountPath: /config/secret
+      readOnly: true
+
+
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  # ingress:
+  #   main:
+  #     enabled: true
+  #     annotations:
+  #       cert-manager.io/cluster-issuer: letsencrypt-prod
+  #       kubernetes.io/ingress.class: traefik
+  #       traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+  #       traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+  #       traefik.ingress.kubernetes.io/redirect-entry-point: https
+  #       traefik.ingress.kubernetes.io/redirect-permanent: "true"
+  #     hosts:
+  #       - host: zigbee2mqtt.theater.kelbert.fr
+  #         paths:
+  #           - path: /
+  #             pathType: Prefix
+  #     tls:
+  #       - hosts:
+  #           - zigbee2mqtt.theater.kelbert.fr
+  #         secretName: zigbee2mqtt-theater-kelbert-fr-tls
+
+  # -- Configure resource requests and limits for the Zigbee2MQTT container
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # -- Node selection for pod assignment
+  nodeSelector: {}
+
+  # -- Tolerations for pod assignment
+  tolerations: []
+
+  # -- Affinity for pod assignment
+  affinity: {}
+
+  # -- Zigbee2MQTT configuration
+  config:
+    # MQTT Settings
+    mqtt:
+      base_topic: zigbee2mqtt
+      server: mqtt://mosquitto.mosquitto.svc.cluster.local:1883
+      user: '!secret.yaml user'
+      password: '!secret.yaml password'
+
+    # Serial configuration for SLZB-06
+    serial:
+      # Location of SLZB-06 - TCP connection to network adapter
+      port: tcp://192.168.1.216:6638
+      baudrate: 115200
+      adapter: zstack
+      # Disable green led?
+      disable_led: false
+
+    # Advanced settings
+    advanced:
+      # Set output power to max 20
+      transmit_power: 20
+      log_level: info
+      pan_id: 0x1a62
+      channel: 11
+      network_key: GENERATE
+      homeassistant_discovery_topic: homeassistant
+      homeassistant_status_topic: homeassistant/status
+      last_seen: ISO_8601
+      elapsed: true
+
+    # Web Interface
+    frontend:
+      port: 8080
+      host: 0.0.0.0
+
+    # Device Options
+    device_options:
+      retain: false
+
+    # Experimental Features
+    experimental:
+      new_api: true
+
+    # Enable Home Assistant integration
+    homeassistant: true
