@@ -20,5 +20,5 @@ prometheus:
       static_configs:
         - targets:
           - theater-1.magstatt.infra.mout.ch:9100
-  nodeExporter:
+  prometheus-node-exporter:
     enabled: false
