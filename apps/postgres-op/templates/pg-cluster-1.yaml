@@ -20,11 +20,13 @@ spec:
     epibank.epibank: []
     simone.simone: []
     goauthentik.goauthentik: []
+    firefly.firefly: []
   databases:
     nextcloud: nextcloud.nextcloud
     cocovoit: cocovoit.cocovoit
     epibank: epibank.epibank
     simone: simone.simone
     goauthentik: goauthentik.goauthentik
+    firefly: firefly.firefly
   postgresql:
     version: "14"

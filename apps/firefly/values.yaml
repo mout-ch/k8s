@@ -1,0 +1,131 @@
+---
+firefly-iii:
+  # -- Firefly III image configuration
+  image:
+    repository: fireflyiii/core
+    tag: "version-6.1.21"
+    pullPolicy: IfNotPresent
+
+  # -- Environment variables
+  env:
+    # -- Set the container timezone
+    TZ: "Europe/Zurich"
+    # -- Application key (should be 32 characters, generated randomly)
+    APP_KEY: "base64:SomeRandomStringOf32CharsForAppKey="
+    # -- Site URL
+    SITE_OWNER: "admin@kelbert.fr"
+    # -- Database configuration
+    DB_CONNECTION: "pgsql"
+    DB_HOST: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+    DB_PORT: "5432"
+    DB_DATABASE: "firefly"
+    DB_USERNAME: "firefly.firefly"
+    # -- Cache configuration
+    CACHE_DRIVER: "file"
+    SESSION_DRIVER: "file"
+    # -- Mail configuration (optional)
+    MAIL_MAILER: "smtp"
+    MAIL_HOST: "smtp.gmail.com"
+    MAIL_PORT: "587"
+    MAIL_FROM: "noreply@kelbert.fr"
+    MAIL_USERNAME: "!secret mail_username"
+    MAIL_PASSWORD: "!secret mail_password"
+    MAIL_ENCRYPTION: "tls"
+
+  # -- Environment variables from secrets
+  envFrom:
+    - secretRef:
+        name: "firefly.firefly.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+        optional: false
+
+  # -- Service configuration
+  service:
+    type: ClusterIP
+    port: 8080
+
+  # -- Ingress configuration
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+      traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+      traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    hosts:
+      - host: firefly.kelbert.fr
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - firefly.kelbert.fr
+        secretName: firefly-kelbert-fr-tls
+
+  # -- Persistence for uploads and data
+  persistence:
+    enabled: true
+    storageClass: local-path
+    accessMode: ReadWriteOnce
+    size: 5Gi
+
+  # -- Resource configuration
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+  # -- Security context
+  securityContext:
+    runAsUser: 33
+    runAsGroup: 33
+    fsGroup: 33
+
+  # -- External PostgreSQL configuration
+  # Uses existing secret for database credentials
+  externalDatabase:
+    enabled: true
+    existingSecret: "firefly.firefly.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+    existingSecretPasswordKey: "password"
+    existingSecretUsernameKey: "username"
+
+  # -- Disable embedded PostgreSQL
+  postgresql:
+    enabled: false
+
+  # -- Node selection
+  nodeSelector: {}
+
+  # -- Tolerations
+  tolerations: []
+
+  # -- Affinity
+  affinity: {}
+
+  # -- Init containers for database setup
+  initContainers:
+    - name: wait-for-db
+      image: postgres:15
+      command:
+        - sh
+        - -c
+        - |
+          until pg_isready -h mout-ch-pg-cluster-1.postgres-op.svc.cluster.local -p 5432 -U firefly.firefly; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+
+  # -- Additional configuration
+  config:
+    # Enable various Firefly III features
+    FIREFLY_III_LAYOUT: "v1"
+    APP_ENV: "production"
+    APP_DEBUG: "false"
+    APP_LOG_LEVEL: "info"
+    AUDIT_LOG_LEVEL: "info"
