@@ -3,40 +3,32 @@ firefly-iii:
   # -- Firefly III image configuration
   image:
     repository: fireflyiii/core
-    tag: "version-6.1.21"
+    tag: "version-6.4.7"
     pullPolicy: IfNotPresent
 
-  # -- Environment variables
-  env:
-    # -- Set the container timezone
-    TZ: "Europe/Zurich"
-    # -- Application key (should be 32 characters, generated randomly)
-    APP_KEY: "base64:SomeRandomStringOf32CharsForAppKey="
-    # -- Site URL
-    SITE_OWNER: "admin@kelbert.fr"
-    # -- Database configuration
-    DB_CONNECTION: "pgsql"
-    DB_HOST: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
-    DB_PORT: "5432"
-    DB_DATABASE: "firefly"
-    DB_USERNAME: "firefly.firefly"
-    # -- Cache configuration
-    CACHE_DRIVER: "file"
-    SESSION_DRIVER: "file"
-    # -- Mail configuration (optional)
-    MAIL_MAILER: "smtp"
-    MAIL_HOST: "smtp.gmail.com"
-    MAIL_PORT: "587"
-    MAIL_FROM: "noreply@kelbert.fr"
-    MAIL_USERNAME: "!secret mail_username"
-    MAIL_PASSWORD: "!secret mail_password"
-    MAIL_ENCRYPTION: "tls"
-
-  # -- Environment variables from secrets
-  envFrom:
-    - secretRef:
-        name: "firefly.firefly.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
-        optional: false
+  config:
+    envValuesFrom:
+      DB_PASSWORD:
+        secretKeyRef:
+          name: "firefly.firefly.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+          key: "password"
+    
+    env:
+      # -- Set the container timezone
+      TZ: "Europe/Zurich"
+      # -- Application key (should be 32 characters, generated randomly)
+      APP_KEY: "base64:SomeRandomStringOf32CharsForAppKey="
+      # -- Site URL
+      SITE_OWNER: "admin@kelbert.fr"
+      # -- Database configuration
+      DB_CONNECTION: "pgsql"
+      DB_HOST: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+      DB_PORT: "5432"
+      DB_DATABASE: "firefly"
+      DB_USERNAME: "firefly.firefly"
+      # -- Cache configuration
+      CACHE_DRIVER: "file"
+      SESSION_DRIVER: "file"
 
   # -- Service configuration
   service:
@@ -106,26 +98,3 @@ firefly-iii:
 
   # -- Affinity
   affinity: {}
-
-  # -- Init containers for database setup
-  initContainers:
-    - name: wait-for-db
-      image: postgres:15
-      command:
-        - sh
-        - -c
-        - |
-          until pg_isready -h mout-ch-pg-cluster-1.postgres-op.svc.cluster.local -p 5432 -U firefly.firefly; do
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 2
-          done
-          echo "PostgreSQL is ready!"
-
-  # -- Additional configuration
-  config:
-    # Enable various Firefly III features
-    FIREFLY_III_LAYOUT: "v1"
-    APP_ENV: "production"
-    APP_DEBUG: "false"
-    APP_LOG_LEVEL: "info"
-    AUDIT_LOG_LEVEL: "info"
