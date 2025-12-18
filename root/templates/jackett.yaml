@@ -20,7 +20,7 @@ spec:
       valuesObject:
         image:
           repository: ghcr.io/hotio/jackett
-          tag: release-0.22.2418
+          tag: release-0.24.478
         persistence:
           config:
             enabled: true
