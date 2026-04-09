@@ -1,0 +1,57 @@
+---
+seerr-chart:
+  # -- Image configuration
+  image:
+    registry: ghcr.io
+    repository: seerr-team/seerr
+    pullPolicy: IfNotPresent
+    tag: ''
+
+  # -- Environment variables to add to the seerr pods
+  extraEnv:
+    - name: TZ
+      value: "Europe/Zurich"
+
+  # -- Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+
+  # -- Creating PVC to store configuration
+  config:
+    persistence:
+      enabled: true
+      size: 5Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: local-path
+
+  # -- Ingress configuration
+  ingress:
+    enabled: true
+    ingressClassName: "traefik"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+      traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
+      traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+      traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    hosts:
+      - host: seerr.theater.kelbert.fr
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: seerr-theater-kelbert-fr-tls
+        hosts:
+          - seerr.theater.kelbert.fr
+
+  # -- Resource limits and requests
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+

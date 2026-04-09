@@ -84,6 +84,7 @@
       "matchPackageNames": [
         "jellyfin",
         "jellyseerr",
+        "seerr",
         "radarr",
         "sonarr",
         "jackett",

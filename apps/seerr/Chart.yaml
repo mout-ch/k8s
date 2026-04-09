@@ -1,0 +1,11 @@
+apiVersion: v2
+name: seerr
+description: A Helm chart for Seerr - Media Request/Discovery Platform
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+dependencies:
+  - name: seerr-chart
+    version: 3.4.1
+    repository: oci://ghcr.io/seerr-team/seerr
