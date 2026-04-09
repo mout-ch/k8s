@@ -75,7 +75,7 @@ data:
                 opacity: 0.9;
             }
             .jellyfin { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-            .jellyseerr { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+            .seerr { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
             .radarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
             .sonarr { background: linear-gradient(135deg, #4a5568, #2d3748); }
             .jackett { background: linear-gradient(135deg, #4a5568, #2d3748); }
@@ -134,9 +134,9 @@ data:
                         
                         <div class="col-md-6">
                             <div class="dashboard-card h-100">
-                                <a href="https://jellyseerr.theater.kelbert.fr" class="app-button jellyseerr h-100 d-flex flex-column justify-content-center align-items-center">
+                                <a href="https://seerr.theater.kelbert.fr" class="app-button seerr h-100 d-flex flex-column justify-content-center align-items-center">
                                     <i class="fas fa-search app-icon"></i>
-                                    <div class="app-title">Jellyseerr</div>
+                                    <div class="app-title">Seerr</div>
                                     <div class="app-description">Request & Discover Content</div>
                                 </a>
                             </div>

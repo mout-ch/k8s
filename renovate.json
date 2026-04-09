@@ -83,7 +83,6 @@
       "description": "Media stack updates",
       "matchPackageNames": [
         "jellyfin",
-        "jellyseerr",
         "seerr",
         "radarr",
         "sonarr",
