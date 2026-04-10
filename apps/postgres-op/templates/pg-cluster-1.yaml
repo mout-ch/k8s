@@ -35,4 +35,4 @@ spec:
       extensions:
         pgvector: "public"
   postgresql:
-    version: "14"
+    version: "15"
