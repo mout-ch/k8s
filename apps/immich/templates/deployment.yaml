@@ -16,6 +16,30 @@ spec:
       labels:
         app: immich-server
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: postgres:14-alpine
+          env:
+            - name: PGHOST
+              value: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: "immich.immich"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+                  key: "password"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h $PGHOST -p $PGPORT -U $PGUSER; do
+                echo "Waiting for PostgreSQL to be ready..."
+                sleep 2
+              done
+              echo "PostgreSQL is ready!"
       containers:
         - name: immich-server
           image: ghcr.io/immich-app/immich-server:v1.99.0
@@ -42,9 +66,45 @@ spec:
               value: "immich-redis"
             - name: REDIS_PORT
               value: "6379"
+            - name: IMMICH_ENVIRONMENT
+              value: "production"
+            - name: IMMICH_VERSION
+              value: "v1.99.0"
           ports:
             - name: http
               containerPort: 3001
+          command:
+            - /bin/sh
+            - -c
+            - |
+              # Run database migrations
+              npm run typeorm migration:run
+              # Start the application
+              exec node dist/main.js
+          livenessProbe:
+            httpGet:
+              path: /api/server/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/server/health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+          startupProbe:
+            httpGet:
+              path: /api/server/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 30
           resources:
             requests:
               cpu: 200m
