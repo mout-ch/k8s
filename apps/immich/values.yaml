@@ -1,0 +1,126 @@
+---
+immich:
+  # -- Environment variables
+  env:
+    TZ: "Europe/Zurich"
+    IMMICH_LOG_LEVEL: "log"
+
+  # -- Image configuration
+  image:
+    tag: "v1.99.0"
+    pullPolicy: IfNotPresent
+
+  # -- Immich server configuration
+  immich:
+    enabled: true
+    image:
+      repository: ghcr.io/immich-app/immich-server
+      tag: v1.99.0
+
+  # -- Immich machine learning configuration
+  machine-learning:
+    enabled: true
+    image:
+      repository: ghcr.io/immich-app/immich-machine-learning
+      tag: v1.99.0
+    persistence:
+      cache:
+        enabled: true
+        size: 5Gi
+        storageClass: ceph-csi-rbd
+
+  # -- PostgreSQL database configuration
+  postgresql:
+    enabled: true
+    auth:
+      postgresPassword: !secret postgres_password
+      username: immich
+      password: !secret immich_db_password
+      database: immich
+    primary:
+      persistence:
+        enabled: true
+        storageClass: ceph-csi-rbd
+        size: 5Gi
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+
+  # -- Redis configuration
+  redis:
+    enabled: true
+    auth:
+      enabled: false
+    master:
+      persistence:
+        enabled: true
+        storageClass: ceph-csi-rbd
+        size: 2Gi
+
+  # -- Service configuration
+  service:
+    main:
+      type: ClusterIP
+      ports:
+        http:
+          port: 3001
+
+  # -- Ingress configuration
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+        traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
+        traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+        traefik.ingress.kubernetes.io/redirect-permanent: "true"
+      hosts:
+        - host: "photos.kelbert.fr"
+          paths:
+            - path: "/"
+              pathType: "Prefix"
+      tls:
+        - hosts:
+            - "photos.kelbert.fr"
+          secretName: "photos-kelbert-fr-tls"
+
+  # -- Persistence for photos and library
+  persistence:
+    library:
+      enabled: true
+      type: pvc
+      storageClass: ceph-csi-rbd
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      mountPath: /usr/src/app/upload
+
+  # -- Resource configuration for server
+  resources:
+    server:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+    ml:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+
+  # -- Node selection
+  nodeSelector: {}
+
+  # -- Tolerations
+  tolerations: []
+
+  # -- Affinity
+  affinity: {}

@@ -1,0 +1,200 @@
+---
+# Immich Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  labels:
+    app: immich-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      containers:
+        - name: immich-server
+          image: ghcr.io/immich-app/immich-server:v1.99.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: "Europe/Zurich"
+            - name: IMMICH_LOG_LEVEL
+              value: "log"
+            - name: DB_HOSTNAME
+              value: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              value: "immich.immich"
+            - name: DB_DATABASE
+              value: "immich"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+                  key: "password"
+            - name: REDIS_HOSTNAME
+              value: "immich-redis"
+            - name: REDIS_PORT
+              value: "6379"
+          ports:
+            - name: http
+              containerPort: 3001
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library
+
+---
+# Immich Machine Learning Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  labels:
+    app: immich-machine-learning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      containers:
+        - name: immich-ml
+          image: ghcr.io/immich-app/immich-machine-learning:v1.99.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: "Europe/Zurich"
+            - name: IMMICH_LOG_LEVEL
+              value: "log"
+          ports:
+            - name: http
+              containerPort: 3003
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          volumeMounts:
+            - name: ml-cache
+              mountPath: /cache
+      volumes:
+        - name: ml-cache
+          persistentVolumeClaim:
+            claimName: immich-ml-cache
+
+---
+# Immich Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-server
+  labels:
+    app: immich-server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3001
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: immich-server
+
+---
+# Immich Machine Learning Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-machine-learning
+  labels:
+    app: immich-machine-learning
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3003
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: immich-machine-learning
+
+---
+# Immich Library PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-library
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-csi-rbd
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+# Immich ML Cache PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-ml-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-csi-rbd
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# Immich Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: immich
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+    traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
+    traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - photos.kelbert.fr
+      secretName: photos-kelbert-fr-tls
+  rules:
+    - host: photos.kelbert.fr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: immich-server
+                port:
+                  number: 3001

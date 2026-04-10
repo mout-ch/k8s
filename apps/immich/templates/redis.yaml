@@ -1,0 +1,71 @@
+---
+# Redis Deployment for Immich
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-redis
+  labels:
+    app: immich-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-redis
+  template:
+    metadata:
+      labels:
+        app: immich-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: immich-redis-data
+
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-redis
+  labels:
+    app: immich-redis
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: redis
+      protocol: TCP
+      name: redis
+  selector:
+    app: immich-redis
+
+---
+# Redis Data PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-redis-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-csi-rbd
+  resources:
+    requests:
+      storage: 2Gi

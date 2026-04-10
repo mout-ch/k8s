@@ -90,6 +90,7 @@
         "qbittorrent",
         "home-assistant",
         "zigbee2mqtt",
+        "immich",
         "adguard-home"
       ],
       "groupName": "media-stack",

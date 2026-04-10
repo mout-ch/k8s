@@ -21,6 +21,7 @@ spec:
     simone.simone: []
     goauthentik.goauthentik: []
     firefly.firefly: []
+    immich.immich: []
   databases:
     nextcloud: nextcloud.nextcloud
     cocovoit: cocovoit.cocovoit
@@ -28,5 +29,6 @@ spec:
     simone: simone.simone
     goauthentik: goauthentik.goauthentik
     firefly: firefly.firefly
+    immich: immich.immich
   postgresql:
     version: "14"
