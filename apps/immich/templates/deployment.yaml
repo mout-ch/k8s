@@ -72,6 +72,8 @@ spec:
               value: "v2.7.3"
             - name: IMMICH_SKIP_IMPORT_CHECK
               value: "true"
+            - name: REVERSE_GEOCODING_ENABLED
+              value: "false"
           ports:
             - name: http
               containerPort: 3001
