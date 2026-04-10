@@ -29,12 +29,9 @@ spec:
     simone: simone.simone
     goauthentik: goauthentik.goauthentik
     firefly: firefly.firefly
-    immich: immich.immich
   preparedDatabases:
     immich:
-      preparedDatabaseSelector:
-        matchLabels:
-          prepared: "true"
+      defaultUsers: false
       extensions:
         pgvector: "public"
   postgresql:
