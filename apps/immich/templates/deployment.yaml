@@ -76,7 +76,7 @@ spec:
               value: "false"
           ports:
             - name: http
-              containerPort: 3001
+              containerPort: 2283
           livenessProbe:
             httpGet:
               path: /api/server/health
@@ -172,7 +172,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 3001
+    - port: 2283
       targetPort: http
       protocol: TCP
       name: http
