@@ -150,7 +150,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ceph-csi-rbd
+  storageClassName: csi-rbd-sc
   resources:
     requests:
       storage: 10Gi
@@ -164,7 +164,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ceph-csi-rbd
+  storageClassName: csi-rbd-sc
   resources:
     requests:
       storage: 5Gi

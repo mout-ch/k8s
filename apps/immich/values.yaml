@@ -17,7 +17,7 @@ immich:
       repository: ghcr.io/immich-app/immich-server
       tag: v1.99.0
 
-  # -- Immich machine learning configuration
+  # -- Machine learning configuration
   machine-learning:
     enabled: true
     image:
@@ -27,7 +27,7 @@ immich:
       cache:
         enabled: true
         size: 5Gi
-        storageClass: ceph-csi-rbd
+        storageClass: csi-rbd-sc
 
   # -- PostgreSQL database configuration
   postgresql:
@@ -40,7 +40,7 @@ immich:
     primary:
       persistence:
         enabled: true
-        storageClass: ceph-csi-rbd
+        storageClass: csi-rbd-sc
         size: 5Gi
       resources:
         requests:
@@ -58,7 +58,7 @@ immich:
     master:
       persistence:
         enabled: true
-        storageClass: ceph-csi-rbd
+        storageClass: csi-rbd-sc
         size: 2Gi
 
   # -- Service configuration
@@ -94,7 +94,7 @@ immich:
     library:
       enabled: true
       type: pvc
-      storageClass: ceph-csi-rbd
+      storageClass: csi-rbd-sc
       accessMode: ReadWriteOnce
       size: 10Gi
       mountPath: /usr/src/app/upload
