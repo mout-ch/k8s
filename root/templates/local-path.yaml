@@ -25,61 +25,9 @@ spec:
           - node: compute-2.blotzheim.infra.mout.ch
             paths:
               - /var/lib/rancher/k3s/storage
-              - /mnt/storj-0
-              - /mnt/storj-1
-              - /mnt/storj-2
-              - /mnt/storj-3
         storageClass:
           create: true
           defaultClass: true
           parameters:
             nodePath: /var/lib/rancher/k3s/storage
 
----
-# Size: 10T
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: storj-0
-provisioner: cluster.local/local-path-local-path-provisioner
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-parameters:
-  nodePath: /mnt/storj-0
----
-# Size: 10T
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: storj-1
-provisioner: cluster.local/local-path-local-path-provisioner
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-parameters:
-  nodePath: /mnt/storj-1
----
-# Size: 10T
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: storj-2
-provisioner: cluster.local/local-path-local-path-provisioner
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-parameters:
-  nodePath: /mnt/storj-2
----
-# Size: 10T
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: storj-3
-provisioner: cluster.local/local-path-local-path-provisioner
-volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-parameters:
-  nodePath: /mnt/storj-3
