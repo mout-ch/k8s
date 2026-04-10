@@ -49,6 +49,8 @@ spec:
               value: "Europe/Zurich"
             - name: IMMICH_LOG_LEVEL
               value: "log"
+            - name: IMMICH_ENV
+              value: "production"
             - name: DB_HOSTNAME
               value: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
             - name: DB_PORT
@@ -60,16 +62,12 @@ spec:
                 secretKeyRef:
                   name: "immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
                   key: "password"
-            - name: DB_DATABASE
-              value: "immich"
             - name: DB_DATABASE_NAME
               value: "immich"
             - name: REDIS_HOSTNAME
               value: "immich-redis"
             - name: REDIS_PORT
               value: "6379"
-            - name: IMMICH_ENVIRONMENT
-              value: "production"
             - name: IMMICH_VERSION
               value: "v2.7.3"
           ports:

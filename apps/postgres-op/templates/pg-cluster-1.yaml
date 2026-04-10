@@ -21,7 +21,9 @@ spec:
     simone.simone: []
     goauthentik.goauthentik: []
     firefly.firefly: []
-    immich.immich: []
+    immich.immich:
+    - createdb
+    - createrole
   databases:
     nextcloud: nextcloud.nextcloud
     cocovoit: cocovoit.cocovoit
@@ -34,6 +36,8 @@ spec:
       defaultUsers: true
       extensions:
         pgvector: "public"
+        cube: "public"
+        earthdistance: "public"
       schemas:
         data:
           defaultRoles: true
