@@ -30,5 +30,12 @@ spec:
     goauthentik: goauthentik.goauthentik
     firefly: firefly.firefly
     immich: immich.immich
+  preparedDatabases:
+    immich:
+      preparedDatabaseSelector:
+        matchLabels:
+          prepared: "true"
+      extensions:
+        pgvector: "public"
   postgresql:
     version: "14"
