@@ -31,8 +31,11 @@ spec:
     firefly: firefly.firefly
   preparedDatabases:
     immich:
-      defaultUsers: false
+      defaultUsers: true
       extensions:
         pgvector: "public"
+      schemas:
+        data:
+          defaultRoles: true
   postgresql:
     version: "15"
