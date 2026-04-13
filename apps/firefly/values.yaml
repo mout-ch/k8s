@@ -17,7 +17,7 @@ firefly-iii:
       # -- Set the container timezone
       TZ: "Europe/Zurich"
       # -- Application key (should be 32 characters, generated randomly)
-      APP_KEY: "base64:SomeRandomStringOf32CharsForAppKey="
+      APP_KEY: "base64:zXeNTnbNAQaRdpRRjOiohlGzCFfxPKTwPgj3zdoornA="
       # -- Site URL
       SITE_OWNER: "admin@kelbert.fr"
       # -- Database configuration
