@@ -103,27 +103,29 @@ importer:
     tag: "version-2.2.3"
     pullPolicy: IfNotPresent
 
+  # -- Firefly III connection settings
+  fireflyiii:
+    # -- The URL at which Firefly III is available internally
+    url: "http://firefly-firefly-iii:8080"
+    # -- The public URL at which you access Firefly III
+    vanityUrl: "https://firefly.kelbert.fr"
+    auth:
+      # -- Use existing secret for access token
+      existingSecret: "firefly-data-importer-token"
+
+  # -- Trusted proxies
+  trustedProxies: "**"
+
   config:
     env:
       # -- Set the container timezone
       TZ: "Europe/Zurich"
-      # -- Firefly III URL (internal service)
-      FIREFLY_III_URL: "http://firefly-firefly-iii:8080"
-      # -- Public URL for Firefly III
-      VANITY_URL: "https://firefly.kelbert.fr"
-      # -- Trusted proxies
-      TRUSTED_PROXIES: "**"
       # -- Log level
       LOG_LEVEL: "info"
       # -- Ignore duplicate transaction errors
       IGNORE_DUPLICATE_ERRORS: "true"
     
     envValueFrom:
-      # Personal Access Token - generate in Firefly III under Profile > OAuth > Personal Access Tokens
-      FIREFLY_III_ACCESS_TOKEN:
-        secretKeyRef:
-          name: "firefly-data-importer-token"
-          key: "token"
       # Auto-import secret
       AUTO_IMPORT_SECRET:
         secretKeyRef:
