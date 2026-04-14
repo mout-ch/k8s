@@ -3,7 +3,7 @@ firefly-iii:
   # -- Firefly III image configuration
   image:
     repository: fireflyiii/core
-    tag: "version-6.4.7"
+    tag: "version-6.5.4"
     pullPolicy: IfNotPresent
 
   config:
