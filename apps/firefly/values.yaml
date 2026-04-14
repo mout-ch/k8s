@@ -7,7 +7,7 @@ firefly-iii:
     pullPolicy: IfNotPresent
 
   config:
-    envValuesFrom:
+    envValueFrom:
       DB_PASSWORD:
         secretKeyRef:
           name: "firefly.firefly.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
@@ -58,7 +58,7 @@ firefly-iii:
   # -- Persistence for uploads and data
   persistence:
     enabled: true
-    storageClass: local-path
+    storageClass: csi-rbd-sc
     accessMode: ReadWriteOnce
     size: 5Gi
 
