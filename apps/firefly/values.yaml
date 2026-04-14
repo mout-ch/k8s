@@ -46,10 +46,7 @@ firefly-iii:
       traefik.ingress.kubernetes.io/redirect-entry-point: "https"
       traefik.ingress.kubernetes.io/redirect-permanent: "true"
     hosts:
-      - host: "firefly.kelbert.fr"
-        paths:
-          - path: "/"
-            pathType: "Prefix"
+      - "firefly.kelbert.fr"
     tls:
       - hosts:
           - "firefly.kelbert.fr"
