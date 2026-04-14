@@ -100,7 +100,7 @@ importer:
   # -- Firefly Data Importer image configuration
   image:
     repository: fireflyiii/data-importer
-    tag: "version-1.5.12"
+    tag: "version-2.2.3"
     pullPolicy: IfNotPresent
 
   config:
