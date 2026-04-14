@@ -94,3 +94,78 @@ firefly-iii:
 
   # -- Affinity
   affinity: {}
+
+# Firefly Data Importer configuration
+importer:
+  # -- Firefly Data Importer image configuration
+  image:
+    repository: fireflyiii/data-importer
+    tag: "version-1.5.12"
+    pullPolicy: IfNotPresent
+
+  config:
+    env:
+      # -- Set the container timezone
+      TZ: "Europe/Zurich"
+      # -- Firefly III URL (internal service)
+      FIREFLY_III_URL: "http://firefly-firefly-iii:8080"
+      # -- Public URL for Firefly III
+      VANITY_URL: "https://firefly.kelbert.fr"
+      # -- Trusted proxies
+      TRUSTED_PROXIES: "**"
+      # -- Log level
+      LOG_LEVEL: "info"
+      # -- Ignore duplicate transaction errors
+      IGNORE_DUPLICATE_ERRORS: "true"
+    
+    envValueFrom:
+      # Personal Access Token - generate in Firefly III under Profile > OAuth > Personal Access Tokens
+      FIREFLY_III_ACCESS_TOKEN:
+        secretKeyRef:
+          name: "firefly-data-importer-token"
+          key: "token"
+      # Auto-import secret
+      AUTO_IMPORT_SECRET:
+        secretKeyRef:
+          name: "firefly-data-importer-token"
+          key: "auto-import-secret"
+
+  # -- Service configuration
+  service:
+    type: ClusterIP
+    port: 8080
+
+  # -- Ingress configuration
+  ingress:
+    enabled: true
+    className: "traefik"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+      traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
+      traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+      traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    hosts:
+      - "firefly-importer.kelbert.fr"
+    tls:
+      - hosts:
+          - "firefly-importer.kelbert.fr"
+        secretName: "firefly-importer-kelbert-fr-tls"
+
+  # -- Resource configuration
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # -- Node selection
+  nodeSelector: {}
+
+  # -- Tolerations
+  tolerations: []
+
+  # -- Affinity
+  affinity: {}
