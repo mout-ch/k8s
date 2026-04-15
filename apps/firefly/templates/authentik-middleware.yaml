@@ -7,6 +7,6 @@ metadata:
   name: firefly-importer-auth
 spec:
   forwardAuth:
-    address: http://goauthentik-server.goauthentik.svc.cluster.local/outpost.goauthentik.io/auth/traefik
+    address: http://ak-outpost-traefik-outpost.goauthentik.svc.cluster.local:9000/outpost.goauthentik.io/auth/traefik
     trustForwardHeader: true
     authResponseHeadersRegex: "^X-authentik-"
