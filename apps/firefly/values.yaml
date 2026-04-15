@@ -143,7 +143,7 @@ importer:
     className: "traefik"
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
-      traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd,firefly-importer-auth@kubernetescrd"
+      traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd,firefly-firefly-importer-auth@kubernetescrd"
       traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
       traefik.ingress.kubernetes.io/redirect-entry-point: "https"
       traefik.ingress.kubernetes.io/redirect-permanent: "true"
