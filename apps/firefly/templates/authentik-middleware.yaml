@@ -1,7 +1,7 @@
 ---
 # Traefik ForwardAuth Middleware for Authentik
 # This middleware will require authentication through Authentik before accessing the Firefly Importer
-apiVersion: traefik.io/v1alpha1
+apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: firefly-importer-auth
