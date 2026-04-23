@@ -5,7 +5,7 @@ seerr-chart:
     registry: ghcr.io
     repository: seerr-team/seerr
     pullPolicy: IfNotPresent
-    tag: ''
+    tag: v3.2.0
 
   # -- Environment variables to add to the seerr pods
   extraEnv:
