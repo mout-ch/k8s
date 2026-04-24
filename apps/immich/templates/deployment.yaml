@@ -42,7 +42,7 @@ spec:
               echo "PostgreSQL is ready!"
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v2.7.3
+          image: ghcr.io/immich-app/immich-server:v2.7.5
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
