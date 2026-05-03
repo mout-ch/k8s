@@ -12,7 +12,7 @@ jellyfin:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd,jellyfin-jellyfin-buffering@kubernetescrd
       traefik.ingress.kubernetes.io/frontend-entry-points: http,https
       traefik.ingress.kubernetes.io/redirect-entry-point: https
       traefik.ingress.kubernetes.io/redirect-permanent: "true"
