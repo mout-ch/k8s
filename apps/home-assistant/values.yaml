@@ -17,7 +17,7 @@ home-assistant:
   # -- Use a more recent Home Assistant image
   image:
     repository: ghcr.io/home-assistant/home-assistant
-    tag: "2025.8.3"
+    tag: "2026.4.4"
     pullPolicy: IfNotPresent
           
   # -- Configure persistence settings for the chart under this key.
