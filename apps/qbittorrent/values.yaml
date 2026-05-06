@@ -1,5 +1,11 @@
 ---
 qbittorrent:
+  image:
+      repository: ghcr.io/linuxserver/qbittorrent
+      # -- image pull policy
+      pullPolicy: IfNotPresent
+      # -- image tag
+      tag: 5.1.4-r3-ls453
   env:
     TZ: "Europe/Zurich"
     PUID: 1000
