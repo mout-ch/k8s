@@ -1,0 +1,12 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: jellyfin-streaming
+  namespace: jellyfin
+spec:
+  buffering:
+    maxRequestBodyBytes: 10485760  # 10MB for requests (uploads)
+    memRequestBodyBytes: 2097152    # 2MB in memory
+    maxResponseBodyBytes: 0         # Unlimited for responses (streaming)
+    memResponseBodyBytes: 0         # No response buffering in memory
+    retryExpression: "IsNetworkError() && Attempts() < 2"
