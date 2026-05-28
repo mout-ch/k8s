@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-public-proxy
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-public-proxy
+  template:
+    metadata:
+      labels:
+        app: immich-public-proxy
+    spec:
+      containers:
+      - name: immich-public-proxy
+        image: ghcr.io/alangrainger/immich-public-proxy:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: IMMICH_URL
+          value: "http://immich-server.immich.svc.cluster.local:3001"
+        - name: PUBLIC_BASE_URL
+          value: "https://photos.kelbert.fr"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-public-proxy
+  namespace: immich
+spec:
+  selector:
+    app: immich-public-proxy
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: http
