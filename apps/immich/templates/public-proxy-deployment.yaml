@@ -24,6 +24,10 @@ spec:
           value: "http://immich-server.immich.svc.cluster.local:2283"
         - name: PUBLIC_BASE_URL
           value: "https://photos.kelbert.fr"
+        volumeMounts:
+        - name: config
+          mountPath: /app/config.json
+          subPath: config.json
         resources:
           requests:
             cpu: 50m
@@ -31,6 +35,10 @@ spec:
           limits:
             cpu: 200m
             memory: 256Mi
+      volumes:
+      - name: config
+        configMap:
+          name: immich-public-proxy-config
 ---
 apiVersion: v1
 kind: Service

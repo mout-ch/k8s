@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-public-proxy-config
+  namespace: immich
+data:
+  config.json: |
+    {
+      "ipp": {
+        "allowDownloadAll": 2,
+        "showMetadata": {
+          "description": true
+        },
+        "gallery": {
+          "showTitle": true,
+          "showDescription": true
+        },
+        "lightbox": {
+          "showDownload": true
+        }
+      }
+    }
