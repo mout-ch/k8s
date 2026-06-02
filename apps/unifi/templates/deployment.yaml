@@ -16,8 +16,6 @@ spec:
       labels:
         app: unifi-controller
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: theater-1
       containers:
       - name: unifi
         image: lscr.io/linuxserver/unifi-network-application:10.3.58-ls131
