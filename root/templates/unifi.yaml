@@ -13,7 +13,7 @@ spec:
     targetRevision: HEAD
     path: apps/unifi
   destination:
-    server: https://kubernetes.default.svc
+    name: theater-1.magstatt
     namespace: unifi
   syncPolicy:
     automated:
