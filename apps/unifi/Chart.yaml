@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: unifi
+description: UniFi Network Controller
+type: application
+version: 0.1.0
+appVersion: "8.1.113"
