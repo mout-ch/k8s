@@ -16,6 +16,8 @@ spec:
       labels:
         app: unifi-controller
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: unifi
         image: lscr.io/linuxserver/unifi-network-application:10.3.58-ls131
