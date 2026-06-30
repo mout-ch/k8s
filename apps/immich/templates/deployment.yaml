@@ -209,7 +209,7 @@ spec:
   storageClassName: csi-rbd-sc
   resources:
     requests:
-      storage: 10Gi
+      storage: 20Gi
 
 ---
 # Immich ML Cache PVC
