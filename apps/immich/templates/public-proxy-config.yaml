@@ -9,7 +9,30 @@ data:
       "ipp": {
         "allowDownloadAll": 2,
         "showMetadata": {
-          "description": true
+          "description": {
+            "caption": true,
+            "sidebar": true
+          },
+          "exif": {
+            "dateTimeOriginal": true,
+            "timeZone": false,
+            "fileName": false,
+            "dimensions": true,
+            "fileSize": true,
+            "make": true,
+            "model": true,
+            "lensModel": true,
+            "exposureTime": true,
+            "iso": true,
+            "fNumber": true,
+            "focalLength": true
+          },
+          "location": {
+            "city": false,
+            "state": false,
+            "country": false,
+            "gps": false
+          }
         },
         "gallery": {
           "showTitle": true,
