@@ -111,11 +111,22 @@
       "schedule": [
         "* 0-5 * * 6"
       ]
+    },
+    {
+      "description": "Immich server and machine-learning must share the same version",
+      "matchPackageNames": [
+        "/^ghcr\\.io/immich-app//"
+      ],
+      "groupName": "immich",
+      "automerge": false,
+      "labels": [
+        "media-stack"
+      ]
     }
   ],
   "helm-values": {
     "managerFilePatterns": [
-      "/\\.ya?ml$/"
+      "/(^|/)values\\.ya?ml$/"
     ]
   },
   "helmv3": {
@@ -128,22 +139,22 @@
       "/\\.ya?ml$/"
     ],
     "ignorePaths": [
-      "**/templates/**",
       "**/charts/**"
     ]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update Git commit hashes in ArgoCD Applications",
+      "description": "Update Git commit hashes in ArgoCD Applications (tracks master)",
       "managerFilePatterns": [
         "/^root/templates/.*\\.ya?ml$/"
       ],
       "matchStrings": [
-        "repoURL: https://github\\.com/(?<depName>[^/]+/[^/]+)\\s+targetRevision: (?<currentValue>[a-f0-9]{40})"
+        "repoURL: (?<packageName>https://github\\.com/[^\\s]+?)(\\.git)?\\s+targetRevision: (?<currentDigest>[a-f0-9]{40})"
       ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "loose"
+      "depNameTemplate": "{{{replace \"https://github.com/\" \"\" packageName}}}",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs"
     }
   ],
   "ignoreDeps": [
@@ -156,6 +167,11 @@
     ],
     "assignees": [
       "@rootmout"
+    ]
+  },
+  "argocd": {
+    "managerFilePatterns": [
+      "/^root/templates/.*\\.ya?ml$/"
     ]
   }
 }

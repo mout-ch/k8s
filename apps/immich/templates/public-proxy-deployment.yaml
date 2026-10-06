@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: immich-public-proxy
-        image: ghcr.io/alangrainger/immich-public-proxy:latest
+        image: ghcr.io/alangrainger/immich-public-proxy:3.4.1
         ports:
         - containerPort: 3000
           name: http

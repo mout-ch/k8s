@@ -8,6 +8,8 @@ metadata:
     app: immich-server
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: immich-server
@@ -68,8 +70,6 @@ spec:
               value: "immich-redis"
             - name: REDIS_PORT
               value: "6379"
-            - name: IMMICH_VERSION
-              value: "v2.7.3"
             - name: IMMICH_SKIP_IMPORT_CHECK
               value: "true"
             - name: REVERSE_GEOCODING_ENABLED
@@ -128,6 +128,8 @@ metadata:
     app: immich-machine-learning
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: immich-machine-learning
@@ -138,7 +140,7 @@ spec:
     spec:
       containers:
         - name: immich-ml
-          image: ghcr.io/immich-app/immich-machine-learning:v2.7.3
+          image: ghcr.io/immich-app/immich-machine-learning:v3.1.0
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
