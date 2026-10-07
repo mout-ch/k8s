@@ -1,7 +1,8 @@
 ---
 jellyfin:
   image:
-    tag: 10.11.8
+    repository: docker.io/jellyfin/jellyfin
+    tag: "12.2"
   
   # Run as non-root user for security
   podSecurityContext:

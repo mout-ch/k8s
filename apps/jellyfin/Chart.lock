@@ -1,0 +1,6 @@
+dependencies:
+- name: jellyfin
+  repository: https://rootmout.github.io/jellyfin-helm/
+  version: 0.3.0
+digest: sha256:abc935c9351f840866815304727870a18f6aae9d6cf549a8684ca6add7c47cdf
+generated: "2026-10-07T02:49:36.983303+02:00"
