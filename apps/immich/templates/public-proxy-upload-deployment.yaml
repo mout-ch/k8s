@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-public-proxy-upload
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-public-proxy-upload
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/public-proxy-config.yaml") . | sha256sum }}
+      labels:
+        app: immich-public-proxy-upload
+    spec:
+      containers:
+      - name: immich-public-proxy-upload
+        image: ghcr.io/alangrainger/immich-public-proxy-upload:4.0.0
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: IMMICH_URL
+          value: "http://immich-server.immich.svc.cluster.local:2283"
+        - name: PUBLIC_BASE_URL
+          value: "https://photos.kelbert.fr"
+        volumeMounts:
+        - name: config
+          mountPath: /app/config.json
+          subPath: config.json
+        # /healthcheck returns 503 while Immich is unreachable, so only use it
+        # for readiness: IPP hides the "Add photos" button until it answers ok.
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: http
+          periodSeconds: 20
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+      volumes:
+      - name: config
+        configMap:
+          name: immich-public-proxy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-public-proxy-upload
+  namespace: immich
+spec:
+  selector:
+    app: immich-public-proxy-upload
+  ports:
+  - port: 3000
+    targetPort: 3000
+    name: http

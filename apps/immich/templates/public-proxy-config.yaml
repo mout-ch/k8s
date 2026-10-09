@@ -8,6 +8,11 @@ data:
     {
       "ipp": {
         "allowDownload": 2,
+        "upload": {
+          "maxFileSize": 500,
+          "byteBudget": 10240,
+          "filenamePrefix": "ipp_upload_"
+        },
         "showMetadata": {
           "description": {
             "caption": true,

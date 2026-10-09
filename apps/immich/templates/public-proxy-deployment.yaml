@@ -10,6 +10,8 @@ spec:
       app: immich-public-proxy
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/public-proxy-config.yaml") . | sha256sum }}
       labels:
         app: immich-public-proxy
     spec:
