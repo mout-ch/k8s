@@ -15,9 +15,12 @@ renovate:
   script:
     - echo "Repository path:" && pwd && ls -la
     - echo "Looking for renovate config..." && ls -la renovate.json || echo "renovate.json not found"
+    - >-
+      node -e 'const t = process.env.RENOVATE_TOKEN || "";
+      console.log("RENOVATE_TOKEN length:", t.length, "| starts with glpat-:", t.startsWith("glpat-"), "| unexpanded literal:", t.startsWith("$"));
+      fetch("https://gitlab.com/api/v4/user", { headers: { "PRIVATE-TOKEN": t } }).then(r => console.log("GitLab /user HTTP status:", r.status))'
     - renovate $CI_PROJECT_PATH
   variables:
-    RENOVATE_TOKEN: "$RENOVATE_TOKEN"
     RENOVATE_PLATFORM: "gitlab"
     RENOVATE_ENDPOINT: "https://gitlab.com/api/v4"
     LOG_LEVEL: "debug"
