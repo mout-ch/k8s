@@ -7,7 +7,7 @@ data:
   config.json: |
     {
       "ipp": {
-        "allowDownloadAll": 2,
+        "allowDownload": 2,
         "showMetadata": {
           "description": {
             "caption": true,
