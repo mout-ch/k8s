@@ -1,0 +1,42 @@
+---
+# Ceph RGW daemons (service rgw.s3). nginx fails over between them.
+rgw:
+  servers:
+    - 192.168.14.10:7480
+    - 192.168.14.11:7480
+  # Single public-read bucket, one folder per site.
+  bucket: static-sites
+
+# One entry per site. Its files live in s3://<rgw.bucket>/<name>/, uploaded by
+# the site's own CI:
+#   aws s3 sync public/ s3://static-sites/<name>/ --delete
+# (always keep the /<name>/ folder: without it, --delete wipes every site).
+# Set ingress: false to test a site through a
+# port-forward before moving its domain here:
+#   kubectl -n static-sites port-forward svc/static-sites 8080:80
+#   curl -H 'Host: blog.kelbert.fr' http://localhost:8080/
+sites: []
+#  - name: blog
+#    hosts:
+#      - blog.kelbert.fr
+#    ingress: true
+
+image:
+  repository: nginxinc/nginx-unprivileged
+  tag: 1.30.6-alpine
+  pullPolicy: IfNotPresent
+
+replicas: 2
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    cpu: 500m
+    memory: 128Mi
+
+ingress:
+  className: traefik
+  clusterIssuer: letsencrypt-prod
+  middlewares: kube-system-redirect-https@kubernetescrd

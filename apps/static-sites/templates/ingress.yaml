@@ -1,0 +1,32 @@
+{{- range .Values.sites }}
+{{- if .ingress }}
+---
+# One Ingress (and certificate) per site, so a failing domain does not block the others.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .name }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ $.Values.ingress.clusterIssuer }}
+    traefik.ingress.kubernetes.io/router.middlewares: {{ $.Values.ingress.middlewares }}
+spec:
+  ingressClassName: {{ $.Values.ingress.className }}
+  tls:
+    - hosts:
+        {{- toYaml .hosts | nindent 8 }}
+      secretName: {{ .name }}-tls
+  rules:
+    {{- range .hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: static-sites
+                port:
+                  name: http
+    {{- end }}
+{{- end }}
+{{- end }}

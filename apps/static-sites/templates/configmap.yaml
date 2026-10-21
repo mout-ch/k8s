@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: static-sites-nginx
+data:
+  default.conf: |
+    upstream rgw {
+    {{- range .Values.rgw.servers }}
+      server {{ . }} max_fails=2 fail_timeout=10s;
+    {{- end }}
+      keepalive 16;
+    }
+
+    # Shared by every site: path-style requests to RGW, read-only.
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header Authorization "";
+    proxy_next_upstream error timeout http_502 http_503 http_504;
+    proxy_hide_header x-amz-request-id;
+    proxy_hide_header x-amz-id-2;
+    proxy_hide_header x-rgw-object-type;
+    proxy_hide_header X-Content-Type-Options;
+    proxy_ignore_headers Set-Cookie;
+    proxy_intercept_errors on;
+    recursive_error_pages on;
+
+    # Health checks (kubelet) and unknown hosts.
+    server {
+      listen 8080 default_server;
+      location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+      }
+      location / {
+        return 404;
+      }
+    }
+    {{- range .Values.sites }}
+    {{- if not (regexMatch "^[a-z0-9][a-z0-9-]*$" .name) }}
+    {{- fail (printf "site name %q must be lowercase letters, digits and dashes (it is also the bucket folder)" .name) }}
+    {{- end }}
+
+    # --- {{ .name }} ---
+    server {
+      listen 8080;
+      server_name {{ join " " .hosts }};
+
+      # Read-only: refuse anything else before any proxying or error_page logic.
+      if ($request_method !~ ^(GET|HEAD)$) {
+        return 405;
+      }
+
+      add_header X-Content-Type-Options nosniff always;
+      add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+      location / {
+        # "/docs/" -> "docs/index.html"
+        set $object $uri;
+        if ($object ~ /$) {
+          set $object "${object}index.html";
+        }
+        proxy_pass http://rgw/{{ $.Values.rgw.bucket }}/{{ .name }}$object;
+
+        # Missing keys answer 403 without s3:ListBucket, 404 otherwise.
+        error_page 403 404 = @{{ .name }}_dir;
+      }
+
+      # "/docs" -> "docs/index.html"
+      location @{{ .name }}_dir {
+        proxy_pass http://rgw/{{ $.Values.rgw.bucket }}/{{ .name }}$uri/index.html;
+        error_page 403 404 @{{ .name }}_notfound;
+      }
+
+      # Site's own 404 page, served with a 404 status.
+      location @{{ .name }}_notfound {
+        # A variable is required: named locations reject a static URI here.
+        set $notfound /{{ $.Values.rgw.bucket }}/{{ .name }}/404.html;
+        proxy_pass http://rgw$notfound;
+        # No 404.html in the site: plain nginx 404 rather than RGW's XML error.
+        error_page 403 404 @{{ .name }}_plain404;
+      }
+
+      location @{{ .name }}_plain404 {
+        return 404;
+      }
+    }
+    {{- end }}

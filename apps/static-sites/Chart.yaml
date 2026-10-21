@@ -1,0 +1,9 @@
+---
+apiVersion: v2
+name: static-sites
+description: Static websites served from Ceph RGW (S3) buckets through a shared nginx proxy
+
+type: application
+version: 0.1.0
+
+dependencies: []
