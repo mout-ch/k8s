@@ -68,8 +68,8 @@ firefly-iii:
       cpu: 1000m
       memory: 1Gi
 
-  # -- Security context
-  securityContext:
+  # -- Pod security context (fsGroup is only valid at pod level)
+  podSecurityContext:
     runAsUser: 33
     runAsGroup: 33
     fsGroup: 33

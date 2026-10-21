@@ -9,6 +9,22 @@ stages:
 sast:
   stage: test
 
+validate:
+  stage: test
+  image:
+    name: alpine/helm:4.3.1
+    entrypoint: [""]
+  script:
+    - sh ci/validate.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - changes:
+        - apps/**/*
+        - root/**/*
+        - ci/**/*
+        - .gitlab-ci.yml
+
 renovate:
   stage: maintenance
   image: renovate/renovate
