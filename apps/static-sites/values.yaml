@@ -15,7 +15,12 @@ rgw:
 # port-forward before moving its domain here:
 #   kubectl -n static-sites port-forward svc/static-sites 8080:80
 #   curl -H 'Host: blog.kelbert.fr' http://localhost:8080/
-sites: []
+sites:
+  - name: pharmacie-st-joseph
+    hosts:
+      - pharmacie-st-joseph.com
+    ingress: true
+
 #  - name: blog
 #    hosts:
 #      - blog.kelbert.fr
