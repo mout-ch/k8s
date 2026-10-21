@@ -1,9 +1,0 @@
----
-apiVersion: v2
-name: pharmacie-blotzheim
-description: Pharmacie st joseph website
-
-type: application
-version: 0.1.0
-
-dependencies: []
