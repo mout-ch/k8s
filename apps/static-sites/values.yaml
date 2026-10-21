@@ -26,10 +26,10 @@ sites:
       - pharmacie-hirsingue.com
     ingress: true
 
-#  - name: blog
-#    hosts:
-#      - blog.kelbert.fr
-#    ingress: true
+  - name: blog
+    hosts:
+      - blog.kelbert.fr
+    ingress: true
 
 image:
   repository: nginxinc/nginx-unprivileged
