@@ -31,6 +31,11 @@ sites:
       - blog.kelbert.fr
     ingress: true
 
+  - name: throughgame
+    hosts:
+      - throughgame.kelbert.fr
+    ingress: true
+
 image:
   repository: nginxinc/nginx-unprivileged
   tag: 1.30.6-alpine
