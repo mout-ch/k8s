@@ -10,8 +10,9 @@
 set -eu
 
 KUBECONFORM_VERSION="${KUBECONFORM_VERSION:-v0.8.0}"
-# Schemas for CRDs (Argo CD, cert-manager, Traefik, Zalando...). CRDs missing
-# from the catalog (e.g. ricoberger VaultSecret) are reported as skipped.
+# CRD schemas, in order: the CRDs bundled with the chart itself (exact
+# version), then a community catalog (Argo CD, cert-manager, Traefik...).
+# CRDs found in neither (e.g. ricoberger VaultSecret) are reported as skipped.
 CRD_SCHEMAS='https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
 WORK="$(mktemp -d)"
@@ -27,6 +28,14 @@ if ! command -v kubeconform >/dev/null 2>&1; then
     | tar -xz -C "$WORK/bin" kubeconform
   PATH="$WORK/bin:$PATH"
 fi
+
+# crd2schema.py needs PyYAML (CI installs py3-yaml; locally, use a venv if missing).
+PY=python3
+if ! python3 -c 'import yaml' 2>/dev/null; then
+  python3 -m venv "$WORK/venv" && "$WORK/venv/bin/pip" install -q pyyaml
+  PY="$WORK/venv/bin/python3"
+fi
+CI_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 if [ "$#" -gt 0 ]; then
   charts="$*"
@@ -54,13 +63,17 @@ for chart in $charts; do
     fi
   fi
 
-  if ! helm template "$name" "$WORK/charts/$name" --namespace "$name" >"$WORK/rendered/$name.yaml"; then
+  # --include-crds: Argo CD applies them too, and they feed crd2schema.py.
+  if ! helm template "$name" "$WORK/charts/$name" --namespace "$name" --include-crds >"$WORK/rendered/$name.yaml"; then
     failed="$failed $chart(template)"
     continue
   fi
+  "$PY" "$CI_DIR/crd2schema.py" "$WORK/rendered/$name.yaml" "$WORK/schemas/$name"
 
   if ! kubeconform -strict -summary -ignore-missing-schemas \
-      -schema-location default -schema-location "$CRD_SCHEMAS" \
+      -schema-location default \
+      -schema-location "$WORK/schemas/$name/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json" \
+      -schema-location "$CRD_SCHEMAS" \
       "$WORK/rendered/$name.yaml"; then
     failed="$failed $chart(schema)"
   fi
