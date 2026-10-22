@@ -1,10 +1,9 @@
 ---
 postgres-operator:
   configGeneral:
-    # v2 defaults to ConfigMaps for Patroni HA state. Switching with replicas
-    # running risks split-brain: keep Endpoints until the planned migration
-    # (scale to 1 instance, enable ConfigMaps, scale back). See docs/migrate.md.
-    kubernetes_use_configmaps: false
+    # Patroni keeps its HA state in ConfigMaps (Endpoints are deprecated).
+    # Only switch this with a single instance per cluster (split-brain risk).
+    kubernetes_use_configmaps: true
   configKubernetes:
     enable_cross_namespace_secret: true
     pod_environment_configmap: "mout-ch-custom-config"
