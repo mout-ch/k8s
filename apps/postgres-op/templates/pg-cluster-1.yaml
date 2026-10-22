@@ -44,6 +44,9 @@ spec:
   postgresql:
     version: "15"
     parameters:
+      # v2 defaults to scram-sha-256. Keep md5 until every client driver
+      # (cocovoit, epibank, simone...) is confirmed SCRAM-capable.
+      password_encryption: "md5"
       max_connections: "200"
       shared_buffers: "512MB"
       effective_cache_size: "2GB"
