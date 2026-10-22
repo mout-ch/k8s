@@ -9,9 +9,7 @@ spec:
   volume:
     size: 70Gi
     storageClass: csi-rbd-sc
-  # TEMPORARY (ConfigMaps migration, step 2a): back to 2 once
-  # kubernetes_use_configmaps is enabled and the cluster is healthy.
-  numberOfInstances: 1
+  numberOfInstances: 2
   users:
     rootmout:
     - superuser
