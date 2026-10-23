@@ -1,42 +1,44 @@
 ---
-# Configuration for internal service redirects
+# Services running outside Kubernetes (on the Ceph nodes), published through
+# Traefik with a Let's Encrypt certificate. An nginx proxy forwards each host to
+# its addresses and fails over between them. (A selector-less Service with a
+# hand-written Endpoints does not work here: Argo CD excludes Endpoints.)
 services:
   vault:
-    name: vault
-    port: 8200
-    host: vault.infra.mout.ch
-    # Using external IPs instead of endpoints for better compatibility
-    externalIPs:
-      - 192.168.14.10
-      - 192.168.14.11
-      - 192.168.14.12
-  
-  ceph:
-    name: ceph
-    port: 8080
-    host: ceph.infra.mout.ch
-    # Using external IPs instead of endpoints for better compatibility
-    externalIPs:
-      - 192.168.14.10
-      - 192.168.14.11
-      - 192.168.14.12
-
-# Global settings
-namespace: default
-appName: internal-svc
-
-# Ingress configuration
-ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
-  
-  tls:
     enabled: true
-    issuer: letsencrypt-prod
+    host: vault.infra.mout.ch
+    port: 8200
+    # 3-node HA: standbys forward requests to the active node.
+    addresses:
+      - 192.168.14.10
+      - 192.168.14.11
+      - 192.168.14.12
+
+  ceph:
+    # Dashboard served by the active mgr only; standbys redirect to its LAN IP.
+    # Disabled until its exposure is decided.
+    enabled: false
+    host: ceph.infra.mout.ch
+    port: 8080
+    addresses:
+      - 192.168.14.10
+      - 192.168.14.11
+      - 192.168.14.12
+
+proxy:
+  image:
+    repository: nginxinc/nginx-unprivileged
+    tag: 1.30.6-alpine
+  replicas: 2
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 64Mi
+
+ingress:
+  className: traefik
+  clusterIssuer: letsencrypt-prod
+  middlewares: kube-system-redirect-https@kubernetescrd

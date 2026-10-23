@@ -4,5 +4,5 @@ name: internal-svc
 description: Internal service redirector for external endpoints (Vault, Ceph, etc.)
 
 type: application
-version: 0.1.1
+version: 0.2.0
 appVersion: "1.0"

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: internal-svc-proxy
+data:
+  default.conf: |
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    # Try the next address when one is down, sealed or still starting.
+    proxy_next_upstream error timeout http_502 http_503 http_504;
+    proxy_connect_timeout 1s;
+    client_max_body_size 64m;
+
+    server {
+      listen 8080 default_server;
+      location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+      }
+      location / {
+        return 404;
+      }
+    }
+    {{- range $key, $svc := .Values.services }}
+    {{- if $svc.enabled }}
+
+    upstream {{ $key }} {
+      # Shared by all nginx workers, so a dead address is skipped by every one of them.
+      zone {{ $key }} 64k;
+      {{- range $svc.addresses }}
+      server {{ . }}:{{ $svc.port }} max_fails=2 fail_timeout=10s;
+      {{- end }}
+      keepalive 8;
+    }
+
+    server {
+      listen 8080;
+      server_name {{ $svc.host }};
+      location / {
+        proxy_pass http://{{ $key }};
+      }
+    }
+    {{- end }}
+    {{- end }}
