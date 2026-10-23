@@ -1,126 +1,104 @@
 ---
-immich:
-  # -- Environment variables
-  env:
-    TZ: "Europe/Zurich"
-    IMMICH_LOG_LEVEL: "log"
+# Immich (server, machine learning, Redis) with its database on the shared
+# Zalando cluster (apps/postgres-op), plus Immich Public Proxy for shares.
 
-  # -- Image configuration
+timezone: Europe/Zurich
+logLevel: log
+
+domain: photos.kelbert.fr
+
+ingress:
+  className: traefik
+  clusterIssuer: letsencrypt-prod
+  middlewares: kube-system-redirect-https@kubernetescrd
+  tlsSecretName: photos-kelbert-fr-tls
+
+database:
+  host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
+  port: 5432
+  name: immich
+  user: immich.immich
+  # Created by the Zalando operator in this namespace (cross-namespace secret).
+  passwordSecret: immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+  # Only used by the init container waiting for the database (pg_isready).
+  waitImage: postgres:14-alpine
+
+server:
   image:
-    tag: "v1.99.0"
-    pullPolicy: IfNotPresent
-
-  # -- Immich server configuration
-  immich:
-    enabled: true
-    image:
-      repository: ghcr.io/immich-app/immich-server
-      tag: v1.99.0
-
-  # -- Machine learning configuration
-  machine-learning:
-    enabled: true
-    image:
-      repository: ghcr.io/immich-app/immich-machine-learning
-      tag: v1.99.0
-    persistence:
-      cache:
-        enabled: true
-        size: 5Gi
-        storageClass: csi-rbd-sc
-
-  # -- PostgreSQL database configuration
-  postgresql:
-    enabled: true
-    auth:
-      postgresPassword: !secret postgres_password
-      username: immich
-      password: !secret immich_db_password
-      database: immich
-    primary:
-      persistence:
-        enabled: true
-        storageClass: csi-rbd-sc
-        size: 5Gi
-      resources:
-        requests:
-          cpu: 100m
-          memory: 256Mi
-        limits:
-          cpu: 500m
-          memory: 512Mi
-
-  # -- Redis configuration
-  redis:
-    enabled: true
-    auth:
-      enabled: false
-    master:
-      persistence:
-        enabled: true
-        storageClass: csi-rbd-sc
-        size: 2Gi
-
-  # -- Service configuration
-  service:
-    main:
-      type: ClusterIP
-      ports:
-        http:
-          port: 3001
-
-  # -- Ingress configuration
-  ingress:
-    main:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
-        traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
-        traefik.ingress.kubernetes.io/redirect-entry-point: "https"
-        traefik.ingress.kubernetes.io/redirect-permanent: "true"
-      hosts:
-        - host: "photos.kelbert.fr"
-          paths:
-            - path: "/"
-              pathType: "Prefix"
-      tls:
-        - hosts:
-            - "photos.kelbert.fr"
-          secretName: "photos-kelbert-fr-tls"
-
-  # -- Persistence for photos and library
-  persistence:
-    library:
-      enabled: true
-      type: pvc
-      storageClass: csi-rbd-sc
-      accessMode: ReadWriteOnce
-      size: 20Gi
-      mountPath: /usr/src/app/upload
-
-  # -- Resource configuration for server
+    repository: ghcr.io/immich-app/immich-server
+    tag: v3.3.1
+  extraEnv:
+    - name: IMMICH_SKIP_IMPORT_CHECK
+      value: "true"
+    - name: REVERSE_GEOCODING_ENABLED
+      value: "false"
+    - name: DB_SKIP_MIGRATIONS
+      value: "false"
   resources:
-    server:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  library:
+    size: 100Gi
+    storageClass: csi-rbd-sc
+
+machineLearning:
+  # Set to 0 to pause machine learning (smart search, faces, OCR).
+  replicas: 1
+  # Must match server.image.tag.
+  image:
+    repository: ghcr.io/immich-app/immich-machine-learning
+    tag: v3.3.1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+  cache:
+    size: 5Gi
+    storageClass: csi-rbd-sc
+
+redis:
+  image:
+    repository: redis
+    tag: 7-alpine
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  storage:
+    size: 2Gi
+    storageClass: csi-rbd-sc
+
+# Gallery for public shares (/share). Its options are in files/public-proxy-config.json.
+publicProxy:
+  image:
+    repository: ghcr.io/alangrainger/immich-public-proxy
+    tag: 4.0.0
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  # Visitor uploads into shares that allow it (/upload).
+  upload:
+    image:
+      repository: ghcr.io/alangrainger/immich-public-proxy-upload
+      tag: 4.0.0
+    resources:
       requests:
-        cpu: 200m
-        memory: 512Mi
+        cpu: 50m
+        memory: 128Mi
       limits:
-        cpu: 1000m
-        memory: 1Gi
-    ml:
-      requests:
-        cpu: 100m
-        memory: 512Mi
-      limits:
-        cpu: 2000m
-        memory: 2Gi
-
-  # -- Node selection
-  nodeSelector: {}
-
-  # -- Tolerations
-  tolerations: []
-
-  # -- Affinity
-  affinity: {}
+        cpu: 500m
+        memory: 256Mi

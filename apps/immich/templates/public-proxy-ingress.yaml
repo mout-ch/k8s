@@ -2,17 +2,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: immich-public-proxy
-  namespace: immich
+  namespace: {{ .Release.Namespace }}
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.ingress.middlewares | quote }}
     traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
     traefik.ingress.kubernetes.io/redirect-entry-point: "https"
     traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    # Above the main Immich route (priority 50) for the same host.
     traefik.ingress.kubernetes.io/router.priority: "100"
 spec:
   rules:
-  - host: "photos.kelbert.fr"
+  - host: {{ .Values.domain | quote }}
     http:
       paths:
       - path: "/share"
@@ -31,5 +32,5 @@ spec:
               number: 3000
   tls:
   - hosts:
-    - "photos.kelbert.fr"
-    secretName: "photos-kelbert-fr-tls"
+    - {{ .Values.domain | quote }}
+    secretName: {{ .Values.ingress.tlsSecretName | quote }}

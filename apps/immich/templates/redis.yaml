@@ -20,18 +20,13 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:7-alpine
+          image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: redis
               containerPort: 6379
           resources:
-            requests:
-              cpu: 50m
-              memory: 128Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
+            {{- toYaml .Values.redis.resources | nindent 12 }}
           volumeMounts:
             - name: redis-data
               mountPath: /data
@@ -67,7 +62,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: csi-rbd-sc
+  storageClassName: {{ .Values.redis.storage.storageClass }}
   resources:
     requests:
-      storage: 2Gi
+      storage: {{ .Values.redis.storage.size }}

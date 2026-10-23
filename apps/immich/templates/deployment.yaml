@@ -20,18 +20,18 @@ spec:
     spec:
       initContainers:
         - name: wait-for-db
-          image: postgres:14-alpine
+          image: {{ .Values.database.waitImage }}
           env:
             - name: PGHOST
-              value: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+              value: {{ .Values.database.host | quote }}
             - name: PGPORT
-              value: "5432"
+              value: {{ .Values.database.port | quote }}
             - name: PGUSER
-              value: "immich.immich"
+              value: {{ .Values.database.user | quote }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+                  name: {{ .Values.database.passwordSecret | quote }}
                   key: "password"
           command:
             - /bin/sh
@@ -44,38 +44,36 @@ spec:
               echo "PostgreSQL is ready!"
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v3.3.1
+          image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
-              value: "Europe/Zurich"
+              value: {{ .Values.timezone | quote }}
             - name: IMMICH_LOG_LEVEL
-              value: "log"
+              value: {{ .Values.logLevel | quote }}
             - name: IMMICH_ENV
               value: "production"
             - name: DB_HOSTNAME
-              value: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
+              value: {{ .Values.database.host | quote }}
             - name: DB_PORT
-              value: "5432"
+              value: {{ .Values.database.port | quote }}
             - name: DB_USERNAME
-              value: "immich.immich"
+              value: {{ .Values.database.user | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "immich.immich.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do"
+                  name: {{ .Values.database.passwordSecret | quote }}
                   key: "password"
             - name: DB_DATABASE_NAME
-              value: "immich"
+              value: {{ .Values.database.name | quote }}
             - name: REDIS_HOSTNAME
               value: "immich-redis"
             - name: REDIS_PORT
               value: "6379"
-            - name: IMMICH_SKIP_IMPORT_CHECK
-              value: "true"
-            - name: REVERSE_GEOCODING_ENABLED
-              value: "false"
-            - name: DB_SKIP_MIGRATIONS
-              value: "false"
+            {{- range .Values.server.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 2283
@@ -104,12 +102,7 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 120
           resources:
-            requests:
-              cpu: 500m
-              memory: 1Gi
-            limits:
-              cpu: 2000m
-              memory: 4Gi
+            {{- toYaml .Values.server.resources | nindent 12 }}
           volumeMounts:
             - name: library
               mountPath: /usr/src/app/upload
@@ -127,7 +120,7 @@ metadata:
   labels:
     app: immich-machine-learning
 spec:
-  replicas: 1
+  replicas: {{ .Values.machineLearning.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -140,23 +133,18 @@ spec:
     spec:
       containers:
         - name: immich-ml
-          image: ghcr.io/immich-app/immich-machine-learning:v3.3.1
+          image: "{{ .Values.machineLearning.image.repository }}:{{ .Values.machineLearning.image.tag }}"
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
-              value: "Europe/Zurich"
+              value: {{ .Values.timezone | quote }}
             - name: IMMICH_LOG_LEVEL
-              value: "log"
+              value: {{ .Values.logLevel | quote }}
           ports:
             - name: http
               containerPort: 3003
           resources:
-            requests:
-              cpu: 100m
-              memory: 512Mi
-            limits:
-              cpu: 2000m
-              memory: 2Gi
+            {{- toYaml .Values.machineLearning.resources | nindent 12 }}
           volumeMounts:
             - name: ml-cache
               mountPath: /cache
@@ -210,10 +198,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: csi-rbd-sc
+  storageClassName: {{ .Values.server.library.storageClass }}
   resources:
     requests:
-      storage: 100Gi
+      storage: {{ .Values.server.library.size }}
 
 ---
 # Immich ML Cache PVC
@@ -224,10 +212,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: csi-rbd-sc
+  storageClassName: {{ .Values.machineLearning.cache.storageClass }}
   resources:
     requests:
-      storage: 5Gi
+      storage: {{ .Values.machineLearning.cache.size }}
 
 ---
 # Immich Ingress
@@ -236,20 +224,21 @@ kind: Ingress
 metadata:
   name: immich
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    traefik.ingress.kubernetes.io/router.middlewares: "kube-system-redirect-https@kubernetescrd"
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.ingress.middlewares | quote }}
     traefik.ingress.kubernetes.io/frontend-entry-points: "http,https"
     traefik.ingress.kubernetes.io/redirect-entry-point: "https"
     traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    # Below the public proxy's /share and /upload routes (priority 100).
     traefik.ingress.kubernetes.io/router.priority: "50"
 spec:
-  ingressClassName: traefik
+  ingressClassName: {{ .Values.ingress.className }}
   tls:
     - hosts:
-        - photos.kelbert.fr
-      secretName: photos-kelbert-fr-tls
+        - {{ .Values.domain }}
+      secretName: {{ .Values.ingress.tlsSecretName }}
   rules:
-    - host: photos.kelbert.fr
+    - host: {{ .Values.domain }}
       http:
         paths:
           - path: /

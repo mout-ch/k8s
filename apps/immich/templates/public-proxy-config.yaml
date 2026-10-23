@@ -2,49 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: immich-public-proxy-config
-  namespace: immich
+  namespace: {{ .Release.Namespace }}
 data:
   config.json: |
-    {
-      "ipp": {
-        "allowDownload": 2,
-        "upload": {
-          "maxFileSize": 500,
-          "byteBudget": 10240,
-          "filenamePrefix": "ipp_upload_"
-        },
-        "showMetadata": {
-          "description": {
-            "caption": true,
-            "sidebar": true
-          },
-          "exif": {
-            "dateTimeOriginal": true,
-            "timeZone": false,
-            "fileName": false,
-            "dimensions": true,
-            "fileSize": true,
-            "make": true,
-            "model": true,
-            "lensModel": true,
-            "exposureTime": true,
-            "iso": true,
-            "fNumber": true,
-            "focalLength": true
-          },
-          "location": {
-            "city": false,
-            "state": false,
-            "country": false,
-            "gps": false
-          }
-        },
-        "gallery": {
-          "showTitle": true,
-          "showDescription": true
-        },
-        "lightbox": {
-          "showDownload": true
-        }
-      }
-    }
+{{ .Files.Get "files/public-proxy-config.json" | trimSuffix "\n" | indent 4 }}
