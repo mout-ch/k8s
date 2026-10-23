@@ -42,7 +42,7 @@ server:
       cpu: 2000m
       memory: 4Gi
   library:
-    size: 100Gi
+    size: 200Gi
     storageClass: csi-rbd-sc
 
 machineLearning:
