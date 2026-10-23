@@ -2,24 +2,30 @@
 jellyfin:
   image:
     repository: docker.io/jellyfin/jellyfin
-    tag: "12.2"
-  
-  # Run as non-root user for security
-  podSecurityContext:
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
-    runAsNonRoot: true
-  
-  securityContext:
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
-    capabilities:
-      drop:
-        - ALL
-  
-  # Resource limits for Jellyfin media server
-  # Transcoding can be CPU-intensive, adjust based on your workload
+    tag: "12.3"
+
+  # SQLite database on a ReadWriteOnce volume: never run two pods at once.
+  deploymentStrategy:
+    type: Recreate
+
+  # NVIDIA Quadro P400 on theater-1 (RuntimeClass "nvidia" set up on the node).
+  # Then enable it in Jellyfin: Dashboard > Playback > Transcoding > NVIDIA NVENC.
+  runtimeClassName: nvidia
+  jellyfin:
+    env:
+      - name: NVIDIA_VISIBLE_DEVICES
+        value: all
+      - name: NVIDIA_DRIVER_CAPABILITIES
+        value: compute,video,utility
+
+  # Runs as root, like it always did: the former chart silently ignored its
+  # securityContext values, so every file of the config volume (local-path,
+  # where fsGroup has no effect) is owned by root. To go non-root later:
+  # chown -R 1000:1000 the volume on the node, then set runAsUser/runAsGroup 1000.
+  podSecurityContext: {}
+  securityContext: {}
+
+  # Transcoding is CPU-intensive when it cannot use the GPU (e.g. AV1 sources).
   resources:
     requests:
       cpu: 500m
@@ -27,7 +33,7 @@ jellyfin:
     limits:
       cpu: 4000m
       memory: 4Gi
-  
+
   service:
     type: NodePort
     port: 8096
@@ -35,29 +41,38 @@ jellyfin:
 
   ingress:
     enabled: true
+    className: traefik
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd,jellyfin-jellyfin-streaming@kubernetescrd
-      traefik.ingress.kubernetes.io/frontend-entry-points: http,https
-      traefik.ingress.kubernetes.io/redirect-entry-point: https
-      traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    path: /
+      traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
     hosts:
-      - jellyfin.theater.kelbert.fr
+      - host: jellyfin.theater.kelbert.fr
+        paths:
+          - path: /
+            pathType: Prefix
     tls:
       - secretName: jellyfin-theater-kelbert-fr-tls
         hosts:
           - jellyfin.theater.kelbert.fr
 
   persistence:
+    # Same PVC as with the former chart (jellyfin-config): users, watch history,
+    # library database. Must keep this exact name, size and storage class.
     config:
       enabled: true
+      type: pvc
       storageClass: local-path
       accessMode: ReadWriteOnce
       size: 1Gi
+      annotations:
+        # Never let Argo CD prune or delete it, whatever happens to the chart.
+        argocd.argoproj.io/sync-options: Prune=false,Delete=false
 
+    # /var/lib/volumes/media on the node, shared with qBittorrent, Radarr and
+    # Sonarr (see templates/pv.yaml and pvc.yaml).
     media:
       enabled: true
       existingClaim: media
-      storageClass: jellyfin-media
+      # The chart mounts media read-only by default; Jellyfin used to write
+      # there (subtitles, artwork saved next to the files).
+      readOnly: false
