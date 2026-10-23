@@ -89,4 +89,4 @@ zigbee2mqtt:
       adapter: zstack
       baudrate: 115200
       disable_led: false
-      port: tcp://192.168.1.216:6638
+      port: tcp://192.168.1.142:6638
