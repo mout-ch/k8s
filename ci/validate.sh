@@ -56,7 +56,20 @@ for chart in $charts; do
 
   cp -R "$chart" "$WORK/charts/$name"
   if grep -q '^  - name:' "$chart/Chart.yaml"; then
-    if ! helm dependency update "$WORK/charts/$name" >"$WORK/$name.deps.log" 2>&1; then
+    # With a committed Chart.lock, Argo CD runs `helm dependency build`, which
+    # fails if the lock no longer matches Chart.yaml: do the same here. It needs
+    # the HTTP repositories registered (OCI ones work as is).
+    if [ -f "$chart/Chart.lock" ]; then
+      i=0
+      for repo in $(sed -n 's/^ *repository: *//p' "$chart/Chart.yaml" | tr -d '"' | grep '^http'); do
+        i=$((i + 1))
+        helm repo add "$name-$i" "$repo" --force-update >/dev/null
+      done
+      deps_cmd=build
+    else
+      deps_cmd=update
+    fi
+    if ! helm dependency "$deps_cmd" "$WORK/charts/$name" >"$WORK/$name.deps.log" 2>&1; then
       cat "$WORK/$name.deps.log"
       failed="$failed $chart(deps)"
       continue
