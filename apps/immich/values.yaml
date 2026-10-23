@@ -26,7 +26,7 @@ database:
 server:
   image:
     repository: ghcr.io/immich-app/immich-server
-    tag: v3.3.1
+    tag: v3.3.5
   extraEnv:
     - name: IMMICH_SKIP_IMPORT_CHECK
       value: "true"
