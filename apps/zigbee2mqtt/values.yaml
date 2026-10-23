@@ -17,6 +17,21 @@ zigbee2mqtt:
       storageClassName: local-path
     securityContext:
       privileged: false
+    # Zigbee network key from its own Secret (templates/network-secret.yaml),
+    # read through '!network.yaml network_key' below. "items" makes the pod
+    # wait if the key is missing, instead of mounting an empty directory.
+    volumes:
+      - name: network-volume
+        secret:
+          secretName: zigbee2mqtt-network
+          items:
+            - key: network.yaml
+              path: network.yaml
+    volumeMounts:
+      - name: network-volume
+        mountPath: /app/data/network.yaml
+        subPath: network.yaml
+        readOnly: true
 
   service:
     type: ClusterIP
@@ -66,7 +81,10 @@ zigbee2mqtt:
       log_level: info
       log_output:
       - console
-      network_key: GENERATE
+      # Must stay a reference: the chart's init container merges these values
+      # over configuration.yaml at every start, so "GENERATE" here regenerated
+      # a random key each time, which never matched the coordinator.
+      network_key: '!network.yaml network_key'
       pan_id: 6754
       transmit_power: 20
     device_options:
