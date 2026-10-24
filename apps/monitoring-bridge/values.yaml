@@ -27,7 +27,7 @@ config:
     # results to their /64. A resolution error also fails the check.
     - name: torrent-vpn-leak
       type: ipleak_torrent
-      interval: 5m
+      interval: 60m
       timeout: 30s
       failure_threshold: 1
       triggers: [discord]
