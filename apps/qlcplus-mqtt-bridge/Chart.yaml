@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: qlcplus-mqtt-bridge
+description: Forwards MQTT commands to the QLC+ websocket API (https://gitlab.com/rootmout.perso/qlcplus-mqtt-bridge)
+
+type: application
+version: 0.1.0

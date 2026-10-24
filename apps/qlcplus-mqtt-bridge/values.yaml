@@ -1,0 +1,33 @@
+---
+image:
+  repository: registry.gitlab.com/rootmout.perso/qlcplus-mqtt-bridge
+  # Pushed by the project's CI for every git tag (and short SHA / latest on main).
+  tag: 91413da1
+  pullPolicy: IfNotPresent
+
+mqtt:
+  broker: mosquitto.mosquitto.svc.cluster.local
+  port: 1883
+  topic: qlcplus
+  # Secret with "username" and "password" keys, filled from Vault (see below).
+  existingSecret: qlcplus-mqtt-bridge-mqtt
+
+# Creates existingSecret from Vault. Set to false to provide the Secret yourself.
+vaultSecret:
+  enabled: true
+  path: apps/qlcplus-mqtt-bridge/mqtt
+
+qlcplus:
+  websocketUri: ws://qlcplus:9999/qlcplusWS
+  # QLC+ API command sent for each item: QLC+API|<cmd>|<function>|<state>
+  cmd: setFunctionStatus
+
+logLevel: info
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 200m
+    memory: 64Mi
