@@ -2,7 +2,7 @@
 image:
   repository: registry.gitlab.com/mout.ch/monitoring-bridge
   # Short SHA pushed by the project's CI from main (git tags are pushed too).
-  tag: 09cb0cb2
+  tag: 7fd25543
   pullPolicy: IfNotPresent
 
 # Vault secret mout.ch/monitoring-bridge, field "discord_webhook", exposed to
@@ -20,9 +20,11 @@ config:
       webhook_url: "${DISCORD_WEBHOOK_URL}"
 
   monitors:
-    # qBittorrent on theater-1 (Magstatt) must only announce through the VPN.
-    # Fails as soon as the site's real public addresses show up on
+    # Torrent clients must only announce through the VPN. Fails as soon as one
+    # of the sites' real public addresses shows up on
     # https://ipleak.net/?thash=5d6faa2372b1d9b5318ce798edf590b881781d0f
+    # Host names are resolved (A + AAAA) on every check; "/64" widens IPv6
+    # results to their /64. A resolution error also fails the check.
     - name: torrent-vpn-leak
       type: ipleak_torrent
       interval: 5m
@@ -31,8 +33,12 @@ config:
       triggers: [discord]
       torrent_hash: 5d6faa2372b1d9b5318ce798edf590b881781d0f
       reference_ips:
-        - 82.64.236.156             # Magstatt public IPv4
-        - 2a01:e0a:10ba:6a0::/64    # Magstatt IPv6 prefix
+        - magstatt.infra.mout.ch/64
+        - blotzheim.infra.mout.ch/64
+        - hirsingue.infra.mout.ch/64
+        # These names have no AAAA record yet, but theater-1 (Magstatt) does
+        # go out over IPv6: keep its prefix until an AAAA record exists.
+        - 2a01:e0a:10ba:6a0::/64
       expect: absent
       # Only recent announces count, so the alert clears an hour after a leak.
       max_age: 1h
