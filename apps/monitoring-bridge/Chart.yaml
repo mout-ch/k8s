@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: monitoring-bridge
+description: Scheduled infrastructure checks with Discord notifications (https://gitlab.com/mout.ch/monitoring-bridge)
+
+type: application
+version: 0.1.0
