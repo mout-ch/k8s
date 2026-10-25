@@ -7,9 +7,9 @@
 <title>Ouvrir dans votre navigateur</title>
 <style>
   :root { color-scheme: light dark; --bg: #f6f6f4; --fg: #1d1d1b; --muted: #6b6b66; --card: #fff; --accent: #4250af; --line: #e2e2dc;
-          --on-accent: #fff; --badge: #e7e9f7; --wool: #ffffff; --wool-shade: #eceae4; --skin: #3b3936; --cheek: #f3a6a0; --shadow: rgba(29,29,27,.14); }
+          --on-accent: #fff; --badge: #e7e9f7; --wool: #ffffff; --ink: #1d1d1b; --shadow: rgba(29,29,27,.14); }
   @media (prefers-color-scheme: dark) { :root { --bg: #151514; --fg: #ededea; --muted: #a3a39c; --card: #1f1f1d; --accent: #8c98e8; --line: #33332f;
-          --badge: #3a3f63; --wool: #f4f3ef; --wool-shade: #d9d7d0; --skin: #1b1a18; --on-accent: #151514; --shadow: rgba(0,0,0,.35); } }
+          --badge: #3a3f63; --wool: #f4f3ef; --ink: #151514; --on-accent: #151514; --shadow: rgba(0,0,0,.35); } }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
          background: var(--bg); color: var(--fg); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -23,19 +23,21 @@
   .help b { color: var(--fg); font-weight: 600; }
   .stay { font-size: .85rem; color: var(--muted); }
 
-  /* Sheep: a gentle hop, a nodding head, a wagging tail and the odd blink. */
-  .sheep, .shadow, .head, .tail, .eye { transform-box: fill-box; }
+  /* Sheep: a little hop that squashes the tuft, flapping ears, the odd blink. */
+  .sheep, .shadow, .tuft, .ear, .eyes { transform-box: fill-box; }
   .sheep  { animation: hop 1.8s ease-in-out infinite; }
   .shadow { transform-origin: center; animation: squash 1.8s ease-in-out infinite; }
-  .head   { transform-origin: 20% 80%; animation: nod 1.8s ease-in-out infinite; }
-  .tail   { transform-origin: 100% 50%; animation: wag .9s ease-in-out infinite; }
-  .eye    { transform-origin: center; animation: blink 4s infinite; }
-  @keyframes hop    { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-7px); } 60% { transform: translateY(-6px); } }
-  @keyframes squash { 0%, 100% { transform: scaleX(1); opacity: 1; } 45%, 60% { transform: scaleX(.78); opacity: .6; } }
-  @keyframes nod    { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-7deg); } }
-  @keyframes wag    { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(14deg); } }
+  .tuft   { transform-origin: 50% 100%; animation: tuft 1.8s ease-in-out infinite; }
+  .ear-l  { transform-origin: 100% 40%; animation: ear-l 1.8s ease-in-out infinite; }
+  .ear-r  { transform-origin: 0% 40%; animation: ear-r 1.8s ease-in-out infinite; }
+  .eyes   { transform-origin: center; animation: blink 4s infinite; }
+  @keyframes hop    { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-40px); } 60% { transform: translateY(-34px); } }
+  @keyframes squash { 0%, 100% { transform: scaleX(1); opacity: 1; } 45%, 60% { transform: scaleX(.75); opacity: .55; } }
+  @keyframes tuft   { 0%, 100% { transform: scale(1, 1); } 20% { transform: scale(1.04, .93); } 50% { transform: scale(.98, 1.04); } }
+  @keyframes ear-l  { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(14deg); } }
+  @keyframes ear-r  { 0%, 100% { transform: rotate(0); } 45% { transform: rotate(-14deg); } }
   @keyframes blink  { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
-  @media (prefers-reduced-motion: reduce) { .sheep, .shadow, .head, .tail, .eye { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .sheep, .shadow, .tuft, .ear, .eyes { animation: none; } }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -43,29 +45,18 @@
 <main>
   <svg class="logo" viewBox="0 0 120 120" role="img" aria-label="Mouton">
     <circle cx="60" cy="60" r="58" fill="var(--badge)"/>
-    <ellipse class="shadow" cx="57" cy="97" rx="27" ry="4" fill="var(--shadow)"/>
-    <g class="sheep">
-      <g fill="var(--skin)">
-        <rect x="40" y="72" width="7" height="22" rx="3.5"/>
-        <rect x="51" y="74" width="7" height="20" rx="3.5"/>
-        <rect x="63" y="74" width="7" height="20" rx="3.5"/>
-        <rect x="74" y="72" width="7" height="22" rx="3.5"/>
-      </g>
-      <circle class="tail" cx="27" cy="58" r="7" fill="var(--wool-shade)"/>
-      <g fill="var(--wool-shade)">
-        <circle cx="38" cy="70" r="13"/><circle cx="56" cy="74" r="14"/><circle cx="74" cy="70" r="12"/>
-      </g>
-      <g fill="var(--wool)">
-        <circle cx="36" cy="58" r="13"/><circle cx="50" cy="49" r="15"/><circle cx="66" cy="50" r="14"/>
-        <circle cx="76" cy="60" r="12"/><circle cx="46" cy="66" r="14"/><circle cx="62" cy="66" r="14"/>
-      </g>
-      <g class="head">
-        <ellipse cx="78" cy="49" rx="8" ry="3.6" transform="rotate(-28 78 49)" fill="var(--skin)"/>
-        <ellipse cx="88" cy="58" rx="11.5" ry="13.5" fill="var(--skin)"/>
-        <circle cx="84" cy="45.5" r="6" fill="var(--wool)"/><circle cx="91" cy="44.5" r="5" fill="var(--wool)"/>
-        <g class="eye"><circle cx="92" cy="55.5" r="2.8" fill="#fff"/><circle cx="92.8" cy="55.8" r="1.4" fill="#1d1d1b"/></g>
-        <circle cx="94.5" cy="64" r="2.3" fill="var(--cheek)" opacity=".75"/>
-      </g>
+    <ellipse class="shadow" cx="60" cy="103" rx="24" ry="3.5" fill="var(--shadow)"/>
+    <g transform="translate(26.5 15) scale(0.134)">
+  <g class="sheep">
+    <g class="wool-body"><g fill="var(--ink)"><circle cx="85" cy="330" r="74"/><circle cx="68" cy="420" r="74"/><circle cx="105" cy="500" r="74"/><circle cx="175" cy="560" r="74"/><circle cx="250" cy="578" r="74"/><circle cx="325" cy="560" r="74"/><circle cx="395" cy="500" r="74"/><circle cx="432" cy="420" r="74"/><circle cx="415" cy="330" r="74"/><circle cx="250" cy="430" r="176"/></g><g fill="var(--wool)"><circle cx="85" cy="330" r="58"/><circle cx="68" cy="420" r="58"/><circle cx="105" cy="500" r="58"/><circle cx="175" cy="560" r="58"/><circle cx="250" cy="578" r="58"/><circle cx="325" cy="560" r="58"/><circle cx="395" cy="500" r="58"/><circle cx="432" cy="420" r="58"/><circle cx="415" cy="330" r="58"/><circle cx="250" cy="430" r="160"/></g></g>
+    <path class="ear ear-l" d="M156 246 L8 228 Q0 228 3 237 L26 312 Q29 320 38 320 L156 330 Z" fill="var(--ink)"/>
+    <path class="ear ear-r" d="M344 246 L492 228 Q500 228 497 237 L474 312 Q471 320 462 320 L344 330 Z" fill="var(--ink)"/>
+    <path d="M132 232 C132 330 178 384 178 440 L178 468 C178 506 208 532 250 532 C292 532 322 506 322 468 L322 440 C322 384 368 330 368 232 Z"
+          fill="var(--wool)" stroke="var(--ink)" stroke-width="16" stroke-linejoin="round"/>
+    <g class="eyes" fill="var(--ink)"><circle cx="192" cy="316" r="19"/><circle cx="308" cy="316" r="19"/></g>
+    <path d="M206 458 Q250 498 294 458" fill="none" stroke="var(--ink)" stroke-width="16" stroke-linecap="round"/>
+    <g class="tuft"><g fill="var(--ink)"><circle cx="118" cy="150" r="71"/><circle cx="180" cy="88" r="76"/><circle cx="255" cy="62" r="78"/><circle cx="330" cy="88" r="74"/><circle cx="385" cy="150" r="68"/><circle cx="365" cy="212" r="62"/><circle cx="300" cy="232" r="66"/><circle cx="225" cy="236" r="66"/><circle cx="150" cy="214" r="64"/><circle cx="250" cy="160" r="111"/></g><g fill="var(--wool)"><circle cx="118" cy="150" r="55"/><circle cx="180" cy="88" r="60"/><circle cx="255" cy="62" r="62"/><circle cx="330" cy="88" r="58"/><circle cx="385" cy="150" r="52"/><circle cx="365" cy="212" r="46"/><circle cx="300" cy="232" r="50"/><circle cx="225" cy="236" r="50"/><circle cx="150" cy="214" r="48"/><circle cx="250" cy="160" r="95"/></g></g>
+  </g>
     </g>
   </svg>
 
