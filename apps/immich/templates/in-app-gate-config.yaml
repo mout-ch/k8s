@@ -1,0 +1,67 @@
+{{- if .Values.publicProxy.inAppGate.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-in-app-gate
+  namespace: {{ .Release.Namespace }}
+data:
+  default.conf: |
+    # In-app browser of Messenger & co: true for page loads only, so images,
+    # videos and API calls made by the gallery itself are never intercepted.
+    map $http_user_agent $inapp_ua {
+      default 0;
+      "~*{{ .Values.publicProxy.inAppGate.userAgentRegex }}" 1;
+    }
+    map "$http_sec_fetch_dest:$http_accept" $is_page {
+      default 0;
+      "~^document:" 1;
+      "~^:.*text/html" 1;
+    }
+    # "Rester ici quand même" adds ?stay=1, remembered for an hour in a cookie.
+    map "$arg_stay$cookie_ipp_stay" $stay {
+      default 1;
+      "" 0;
+    }
+    map "$inapp_ua$is_page$stay" $gate {
+      default 0;
+      "110" 1;
+    }
+    map $arg_stay $stay_cookie {
+      default "";
+      "1" "ipp_stay=1; Path=/share; Max-Age=3600; SameSite=Lax; Secure";
+    }
+
+    server {
+      listen 8080 default_server;
+
+      location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+      }
+
+      location /share {
+        if ($gate) {
+          rewrite ^ /__in-app-browser.html last;
+        }
+        add_header Set-Cookie $stay_cookie;
+        add_header Vary User-Agent;
+        proxy_pass http://immich-public-proxy.{{ .Release.Namespace }}.svc.cluster.local:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+        # Zip downloads can be large: stream them instead of buffering.
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+      }
+
+      location = /__in-app-browser.html {
+        internal;
+        root /usr/share/nginx/in-app;
+        add_header Cache-Control "no-store";
+        add_header Vary User-Agent;
+      }
+    }
+
+  __in-app-browser.html: |
+{{ .Files.Get "files/in-app-browser.html" | trimSuffix "\n" | indent 4 }}
+{{- end }}

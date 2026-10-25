@@ -20,9 +20,15 @@ spec:
         pathType: Prefix
         backend:
           service:
+            {{- if .Values.publicProxy.inAppGate.enabled }}
+            name: immich-in-app-gate
+            port:
+              number: 8080
+            {{- else }}
             name: immich-public-proxy
             port:
               number: 3000
+            {{- end }}
       - path: "/upload"
         pathType: Prefix
         backend:

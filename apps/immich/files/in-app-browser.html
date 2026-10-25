@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ouvrir dans votre navigateur</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f6f6f4; --fg: #1d1d1b; --muted: #6b6b66; --card: #fff; --accent: #4250af; --line: #e2e2dc; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #151514; --fg: #ededea; --muted: #a3a39c; --card: #1f1f1d; --accent: #8c98e8; --line: #33332f; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+         background: var(--bg); color: var(--fg); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 28px 24px; }
+  h1 { font-size: 1.3rem; line-height: 1.3; margin: 0 0 12px; }
+  p { margin: 0 0 20px; color: var(--muted); }
+  .btn { display: block; width: 100%; padding: 14px 16px; border-radius: 12px; border: 0; font: inherit; font-weight: 600;
+         text-align: center; text-decoration: none; cursor: pointer; margin-bottom: 12px; }
+  .primary { background: var(--accent); color: #fff; }
+  .secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+  .help { font-size: .92rem; border-top: 1px solid var(--line); padding-top: 16px; margin: 8px 0 16px; }
+  .help b { color: var(--fg); }
+  .stay { display: block; text-align: center; font-size: .9rem; color: var(--muted); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ouvrez cet album dans votre navigateur</h1>
+  <p>Le navigateur intégré de cette application gère mal le téléchargement des photos.</p>
+
+  <a class="btn primary" id="open" hidden>Ouvrir dans le navigateur</a>
+  <button class="btn secondary" id="copy" type="button">Copier le lien</button>
+
+  <div class="help" id="help-ios" hidden>Sinon : touchez <b>⋯</b> ou <b>⇧</b> en haut à droite, puis <b>« Ouvrir dans Safari »</b>.</div>
+  <div class="help" id="help-other">Sinon : touchez <b>⋮</b> en haut à droite, puis <b>« Ouvrir dans le navigateur »</b>.</div>
+
+  <a class="stay" id="stay">Rester ici quand même</a>
+</main>
+<script>
+  (function () {
+    var url = new URL(window.location.href);
+    var ua = navigator.userAgent;
+    var ios = /iPhone|iPad|iPod/.test(ua);
+    var android = /Android/.test(ua);
+    var open = document.getElementById("open");
+
+    if (android) {
+      // Hands the URL to Chrome; Android falls back to the URL if it is missing.
+      open.href = "intent://" + url.host + url.pathname + url.search + url.hash +
+        "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" +
+        encodeURIComponent(url.href) + ";end";
+      open.textContent = "Ouvrir dans Chrome";
+      open.hidden = false;
+    } else if (ios) {
+      // iOS 17+: opens Safari from in-app browsers that allow it.
+      open.href = "x-safari-" + url.href;
+      open.textContent = "Ouvrir dans Safari";
+      open.hidden = false;
+      document.getElementById("help-ios").hidden = false;
+      document.getElementById("help-other").hidden = true;
+    }
+
+    document.getElementById("copy").addEventListener("click", function () {
+      var btn = this;
+      var done = function () { btn.textContent = "Lien copié ✓"; };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url.href).then(done, function () { window.prompt("Copiez ce lien :", url.href); });
+      } else {
+        window.prompt("Copiez ce lien :", url.href);
+      }
+    });
+
+    var stay = new URL(url.href);
+    stay.searchParams.set("stay", "1");
+    document.getElementById("stay").href = stay.pathname + stay.search + stay.hash;
+  })();
+</script>
+</body>
+</html>

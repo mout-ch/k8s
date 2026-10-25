@@ -1,0 +1,73 @@
+{{- if .Values.publicProxy.inAppGate.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-in-app-gate
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-in-app-gate
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/in-app-gate-config.yaml") . | sha256sum }}
+      labels:
+        app: immich-in-app-gate
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: nginx
+        image: "{{ .Values.publicProxy.inAppGate.image.repository }}:{{ .Values.publicProxy.inAppGate.image.tag }}"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 101
+          runAsGroup: 101
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        resources:
+          {{- toYaml .Values.publicProxy.inAppGate.resources | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+        - name: config
+          mountPath: /usr/share/nginx/in-app/__in-app-browser.html
+          subPath: __in-app-browser.html
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: config
+        configMap:
+          name: immich-in-app-gate
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-in-app-gate
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: immich-in-app-gate
+  ports:
+  - port: 8080
+    targetPort: http
+    name: http
+{{- end }}

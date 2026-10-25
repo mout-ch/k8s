@@ -102,3 +102,20 @@ publicProxy:
       limits:
         cpu: 500m
         memory: 256Mi
+  # Shows an "open in your browser" page when a share is opened inside an app's
+  # built-in browser (Messenger, Facebook, Instagram), where downloads work badly.
+  # An nginx in front of /share; link previews (facebookexternalhit) are untouched.
+  inAppGate:
+    enabled: true
+    # Matched against the User-Agent of page loads (not images or API calls).
+    userAgentRegex: "(FBAN|FBAV|FB_IAB|Instagram)"
+    image:
+      repository: nginxinc/nginx-unprivileged
+      tag: 1.30.6-alpine
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
