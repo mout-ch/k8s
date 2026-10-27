@@ -10,7 +10,17 @@ ceph-csi-rbd:
   provisioner:
     replicaCount: 1
 
+  # Value of the live CSIDriver since 2023. The field is immutable: the chart
+  # default ("File") would need the CSIDriver deleted and recreated.
+  CSIDriver:
+    fsGroupPolicy: ReadWriteOnceWithFSType
+
   storageClass:
+    annotations:
+      # One-off for the 3.5.1 -> 3.14 upgrade: thickProvision left the
+      # parameters, which are immutable, so Argo CD deletes and recreates the
+      # StorageClass (existing PVs only reference it by name). Remove once synced.
+      argocd.argoproj.io/sync-options: Force=true,Replace=true
     create: true
     clusterID: af88c536-4b0e-11ee-ad59-67497ccf2e7a
     pool: k3s
