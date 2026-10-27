@@ -15,9 +15,17 @@ ceph-csi-rbd:
   CSIDriver:
     fsGroupPolicy: ReadWriteOnceWithFSType
 
+  # Defined in templates/storageclass.yaml instead: StorageClass parameters are
+  # immutable and chart upgrades keep changing them (3.14 dropped thickProvision,
+  # 3.15 adds a controller-publish secret), each time forcing a delete/recreate.
   storageClass:
-    create: true
-    clusterID: af88c536-4b0e-11ee-ad59-67497ccf2e7a
-    pool: k3s
-    mountOptions:
-      - discard
+    create: false
+
+storageClass:
+  name: csi-rbd-sc
+  clusterID: af88c536-4b0e-11ee-ad59-67497ccf2e7a
+  pool: k3s
+  # Ceph credentials (VaultSecret, templates/secret.yaml).
+  secret: csi-rbd-secret
+  mountOptions:
+    - discard

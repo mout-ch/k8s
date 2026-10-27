@@ -1,0 +1,23 @@
+---
+# Same parameters as the StorageClass created by the 3.5.1 chart in 2023, minus
+# thickProvision. Never change them in place: they are immutable.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClass.name }}
+provisioner: rbd.csi.ceph.com
+parameters:
+  clusterID: {{ .Values.storageClass.clusterID | quote }}
+  pool: {{ .Values.storageClass.pool | quote }}
+  imageFeatures: layering
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-name: {{ .Values.storageClass.secret }}
+  csi.storage.k8s.io/provisioner-secret-namespace: {{ .Release.Namespace }}
+  csi.storage.k8s.io/controller-expand-secret-name: {{ .Values.storageClass.secret }}
+  csi.storage.k8s.io/controller-expand-secret-namespace: {{ .Release.Namespace }}
+  csi.storage.k8s.io/node-stage-secret-name: {{ .Values.storageClass.secret }}
+  csi.storage.k8s.io/node-stage-secret-namespace: {{ .Release.Namespace }}
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+mountOptions:
+  {{- toYaml .Values.storageClass.mountOptions | nindent 2 }}
