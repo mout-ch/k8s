@@ -15,7 +15,6 @@ spec:
     path: apps/vault-operator
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
-  syncPolicy: {}
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -34,4 +33,3 @@ spec:
     path: apps/vault-operator
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
-  syncPolicy: {}

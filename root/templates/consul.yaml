@@ -15,4 +15,3 @@
 #     path: apps/consul
 #     repoURL: https://gitlab.com/mout.ch/k8s.git
 #     targetRevision: HEAD
-#   syncPolicy: {}

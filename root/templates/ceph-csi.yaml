@@ -15,4 +15,3 @@ spec:
     path: apps/ceph-csi
     repoURL: https://gitlab.com/mout.ch/k8s.git
     targetRevision: HEAD
-  syncPolicy: {}

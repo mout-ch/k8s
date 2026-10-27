@@ -11,7 +11,6 @@ spec:
     name: theater-1.magstatt
     namespace: local-path
   project: default
-  syncPolicy: {}
   source:
     path: deploy/chart/local-path-provisioner
     repoURL: https://github.com/rootmout/local-path-provisioner
