@@ -17,7 +17,7 @@ spec:
         - name: simone-registry
       containers:
       - name: simone
-        image: registry.gitlab.com/kelbert-web-services/simone:v2.0.0
+        image: registry.gitlab.com/kelbert-web-services/simone:v2.0.1
         ports:
         - containerPort: 3000
         readinessProbe:
