@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: comptoir
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.ingress.middlewares | quote }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  - host: {{ .Values.domain | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: comptoir
+            port:
+              name: http
+  tls:
+  - hosts:
+    - {{ .Values.domain | quote }}
+    secretName: {{ .Values.ingress.tlsSecretName | quote }}

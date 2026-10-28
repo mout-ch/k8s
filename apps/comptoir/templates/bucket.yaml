@@ -1,0 +1,25 @@
+---
+# Rook creates the bucket, its own RGW user, and a Secret (AWS_ACCESS_KEY_ID,
+# AWS_SECRET_ACCESS_KEY) and ConfigMap (BUCKET_HOST, BUCKET_PORT, BUCKET_NAME)
+# with this name.
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: comptoir-bucket
+  annotations:
+    # The bucket is kept anyway (Retain), but recreating the claim would not
+    # get it back: never let Argo CD prune or delete it.
+    argocd.argoproj.io/sync-options: Prune=false,Delete=false
+spec:
+  bucketName: {{ .Values.bucket.name }}
+  storageClassName: {{ .Values.bucket.storageClass }}
+---
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: comptoir-app
+spec:
+  path: {{ .Values.vault.path }}
+  type: Opaque
+  keys:
+    - jwt

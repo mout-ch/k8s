@@ -21,6 +21,7 @@ spec:
     simone.simone: []
     goauthentik.goauthentik: []
     firefly.firefly: []
+    comptoir.comptoir: []
     immich.immich:
     - createdb
     - createrole
@@ -31,6 +32,7 @@ spec:
     simone: simone.simone
     goauthentik: goauthentik.goauthentik
     firefly: firefly.firefly
+    comptoir: comptoir.comptoir
   preparedDatabases:
     immich:
       defaultUsers: true

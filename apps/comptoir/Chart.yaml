@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: comptoir
+description: Comptoir, bar management app (https://gitlab.com/kelbert-web-services/comptoir)
+
+type: application
+version: 0.1.0

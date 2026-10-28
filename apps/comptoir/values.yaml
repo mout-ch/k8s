@@ -1,0 +1,40 @@
+---
+# Comptoir, with its database on the shared Zalando cluster (apps/postgres-op)
+# and its images in a bucket requested from Rook (apps/rook-ceph-external).
+
+image:
+  repository: registry.gitlab.com/kelbert-web-services/comptoir
+  tag: v1.0.1
+
+domain: kgb.kelbert.fr
+
+ingress:
+  className: traefik
+  clusterIssuer: letsencrypt-prod
+  middlewares: kube-system-redirect-https@kubernetescrd
+  tlsSecretName: kgb.kelbert.fr-tls
+
+database:
+  host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
+  port: 5432
+  name: comptoir
+  # Created by the Zalando operator in this namespace ("username", "password").
+  credentialsSecret: comptoir.comptoir.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+
+# Private: the app serves the photos (/s3/<key>) and reads them with the
+# bucket's credentials.
+bucket:
+  name: comptoir-images
+  storageClass: ceph-bucket
+
+# Vault field "jwt": signs login tokens (openssl rand -base64 48). Changing it
+# logs everyone out.
+vault:
+  path: apps/comptoir
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi

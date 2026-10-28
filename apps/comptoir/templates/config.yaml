@@ -1,0 +1,32 @@
+---
+# Comptoir's configuration file (docs/guide/configuration.md in its repo).
+# ${VAR} are environment variables of the container: database credentials,
+# JWT secret, and the bucket's Secret and ConfigMap created by Rook.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: comptoir-config
+data:
+  config.yaml: |
+    server:
+      port: 8080
+      public_url: https://{{ .Values.domain }}
+
+    database:
+      host: {{ .Values.database.host }}
+      port: {{ .Values.database.port }}
+      name: {{ .Values.database.name }}
+      user: ${DB_USER}
+      password: ${DB_PASSWORD}
+      sslmode: require
+
+    auth:
+      jwt_secret: ${JWT_SECRET}
+
+    storage:
+      endpoint: ${BUCKET_HOST}:${BUCKET_PORT}
+      access_key: ${AWS_ACCESS_KEY_ID}
+      secret_key: ${AWS_SECRET_ACCESS_KEY}
+      bucket: ${BUCKET_NAME}
+      region: us-east-1
+      use_ssl: false

@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comptoir
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comptoir
+  template:
+    metadata:
+      labels:
+        app: comptoir
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+    spec:
+      securityContext:
+        # The image's "comptoir" user has no fixed UID; the app only reads
+        # its files and keeps everything else in Postgres and S3.
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: comptoir
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+          - secretRef:
+              name: comptoir-bucket
+          - configMapRef:
+              name: comptoir-bucket
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.credentialsSecret }}
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.credentialsSecret }}
+                key: password
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: comptoir-app
+                key: jwt
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 15
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: [ALL]
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/comptoir
+          readOnly: true
+        # Large uploads may be buffered to disk.
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: config
+        configMap:
+          name: comptoir-config
+      - name: tmp
+        emptyDir: {}
