@@ -2,10 +2,15 @@
 # The Ceph cluster itself is managed by cephadm: Rook only connects to it in
 # external mode (apps/rook-ceph-external) to create buckets on the existing RGW.
 rook-ceph:
-  # Volumes stay with apps/ceph-csi: no ceph-csi-operator, no CSI drivers.
+  # Volumes stay with apps/ceph-csi: Rook creates no CSI resources and the
+  # ceph-csi-operator does not run. Its CRDs are still installed: Rook 1.21
+  # watches ClientProfiles unconditionally, and crashes every 2 min without them.
   csi:
-    installCsiOperator: false
+    installCsiOperator: true
     createCsiOperatorResources: false
+  ceph-csi-operator:
+    controllerManager:
+      replicas: 0
 
   # Next to the Ceph cluster, on the Blotzheim LAN.
   nodeSelector:
