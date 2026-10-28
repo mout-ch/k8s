@@ -7,5 +7,3 @@ data:
   db_name: "simone"
   db_host: "mout-ch-pg-cluster-1.postgres-op.svc.cluster.local"
   db_port: "5432"
-
-  app_env: "prod"

@@ -17,9 +17,21 @@ spec:
         - name: simone-registry
       containers:
       - name: simone
-        image: registry.gitlab.com/kelbert-web-services/simone:v1.2.0
+        image: registry.gitlab.com/kelbert-web-services/simone:v2.0.0
         ports:
-        - containerPort: 80
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 10
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         env:
           - name: DB_NAME
             valueFrom:
@@ -53,14 +65,13 @@ spec:
                 key: password
                 optional: false
 
-          - name: APP_ENV
-            valueFrom:
-              configMapKeyRef:
-                name: simone
-                key: app_env
+          # built from the variables above, which must come first
+          - name: DATABASE_URL
+            value: "postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
 
-          - name: APP_SECRET
+          # session signing key, at least 32 characters: a new `jwt` key under apps/simone/app in Vault
+          - name: JWT_SECRET
             valueFrom:
               secretKeyRef:
                 name: simone-app
-                key: app
+                key: jwt
