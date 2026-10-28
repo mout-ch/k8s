@@ -100,11 +100,11 @@
       "commitMessageTopic": "Media stack"
     },
     {
-      "description": "ceph-csi 3.15 is tested on k8s 1.31-1.33; raise along with k3s (3.16: 1.32-1.34, but upstream only supports deploying it with ceph-csi-operator)",
+      "description": "ceph-csi 3.16 is tested on k8s 1.32-1.34; raise along with k3s (3.17.0: 1.33-1.35, 3.17.1/3.18: 1.34-1.36; 3.18 images need x86-64-v3). Upstream recommends ceph-csi-operator from 3.16 on",
       "matchPackageNames": [
         "ceph-csi-rbd"
       ],
-      "allowedVersions": "<3.16.0"
+      "allowedVersions": "<3.17.0"
     },
     {
       "description": "Minecraft servers",
