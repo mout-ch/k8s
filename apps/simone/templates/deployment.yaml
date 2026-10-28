@@ -17,61 +17,51 @@ spec:
         - name: simone-registry
       containers:
       - name: simone
-        image: registry.gitlab.com/kelbert-web-services/simone:v2.0.1
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
-        - containerPort: 3000
+        - name: http
+          containerPort: {{ .Values.port }}
         readinessProbe:
           httpGet:
-            path: /api/health
-            port: 3000
+            path: {{ .Values.healthPath }}
+            port: http
         livenessProbe:
           httpGet:
-            path: /api/health
-            port: 3000
+            path: {{ .Values.healthPath }}
+            port: http
           initialDelaySeconds: 10
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
         env:
-          - name: DB_NAME
-            valueFrom:
-              configMapKeyRef:
-                name: simone
-                key: db_name
-
           - name: DB_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: simone
-                key: db_host
-
+            value: {{ .Values.database.host | quote }}
           - name: DB_PORT
-            valueFrom:
-              configMapKeyRef:
-                name: simone
-                key: db_port
-
+            value: {{ .Values.database.port | quote }}
+          - name: DB_NAME
+            value: {{ .Values.database.name | quote }}
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: simone.simone.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                name: {{ .Values.database.credentialsSecret }}
                 key: username
-                optional: false
-
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: simone.simone.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+                name: {{ .Values.database.credentialsSecret }}
                 key: password
-                optional: false
-
-          # built from the variables above, which must come first
+          # Built from the variables above, which must come first.
           - name: DATABASE_URL
             value: "postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
-
-          # session signing key, at least 32 characters: a new `jwt` key under apps/simone/app in Vault
           - name: JWT_SECRET
             valueFrom:
               secretKeyRef:
                 name: simone-app
                 key: jwt
+          {{- with .Values.extraEnv }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- with .Values.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}

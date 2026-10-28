@@ -1,1 +1,39 @@
 ---
+# Simone, with its database on the shared Zalando cluster (apps/postgres-op).
+
+image:
+  repository: registry.gitlab.com/kelbert-web-services/simone
+  tag: v2.0.1
+
+# Port the app listens on; GET healthPath must answer 200 when it is ready.
+port: 3000
+healthPath: /api/health
+
+domain: simone.kelbert.fr
+
+ingress:
+  className: traefik
+  clusterIssuer: letsencrypt-prod
+  middlewares: kube-system-redirect-https@kubernetescrd
+  tlsSecretName: simone.kelbert.fr-tls
+
+database:
+  host: mout-ch-pg-cluster-1.postgres-op.svc.cluster.local
+  port: 5432
+  name: simone
+  # Created by the Zalando operator in this namespace ("username", "password").
+  credentialsSecret: simone.simone.mout-ch-pg-cluster-1.credentials.postgresql.acid.zalan.do
+
+# Vault paths, read by the vault-secrets-operator. It only re-reads Vault when
+# a VaultSecret changes (VAULT_RECONCILIATION_TIME=0): after adding or changing
+# a field in Vault, change templates/secrets.yaml too (e.g. its keys).
+vault:
+  # "jwt": session signing key, at least 32 characters.
+  app: apps/simone/app
+  # "host", "username", "password" of the image registry.
+  registry: apps/simone/registry
+
+# Extra environment variables, e.g. [{name: LOG_LEVEL, value: debug}].
+extraEnv: []
+
+resources: {}

@@ -4,15 +4,12 @@ kind: Ingress
 metadata:
   name: simone-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-redirect-https@kubernetescrd
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.ingress.middlewares | quote }}
 spec:
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
-  - host: simone.kelbert.fr
+  - host: {{ .Values.domain | quote }}
     http:
       paths:
       - path: /
@@ -21,8 +18,8 @@ spec:
           service:
             name: simone
             port:
-              number: 80
+              name: http
   tls:
     - hosts:
-      - simone.kelbert.fr
-      secretName: simone.kelbert.fr-tls
+      - {{ .Values.domain | quote }}
+      secretName: {{ .Values.ingress.tlsSecretName | quote }}

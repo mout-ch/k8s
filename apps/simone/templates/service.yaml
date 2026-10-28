@@ -7,8 +7,9 @@ metadata:
     app: simone
 spec:
   ports:
-  - port: 80
-    targetPort: 3000
+  - name: http
+    port: 80
+    targetPort: http
     protocol: TCP
   selector:
     app: simone
