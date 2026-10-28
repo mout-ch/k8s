@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: rook-ceph-external
+description: The cephadm Ceph cluster and its RGW seen by Rook (external mode), and the StorageClass for ObjectBucketClaims
+
+type: application
+version: 0.1.0

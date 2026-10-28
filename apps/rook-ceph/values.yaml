@@ -1,0 +1,12 @@
+---
+# The Ceph cluster itself is managed by cephadm: Rook only connects to it in
+# external mode (apps/rook-ceph-external) to create buckets on the existing RGW.
+rook-ceph:
+  # Volumes stay with apps/ceph-csi: no ceph-csi-operator, no CSI drivers.
+  csi:
+    installCsiOperator: false
+    createCsiOperatorResources: false
+
+  # Next to the Ceph cluster, on the Blotzheim LAN.
+  nodeSelector:
+    kubernetes.io/hostname: compute-2.blotzheim.infra.mout.ch

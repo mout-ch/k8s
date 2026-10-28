@@ -1,0 +1,32 @@
+---
+# Mon endpoints and credentials of the external cluster, with the names and
+# keys Rook expects (see import-external-cluster.sh).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rook-ceph-mon-endpoints
+data:
+  {{- $mons := list }}
+  {{- range $name, $addr := .Values.ceph.monitors }}
+  {{- $mons = append $mons (printf "%s=%s" $name $addr) }}
+  {{- end }}
+  data: {{ join "," $mons | quote }}
+  mapping: "{}"
+  maxMonId: "2"
+---
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: rook-ceph-mon
+spec:
+  path: {{ .Values.vault.path }}
+  type: kubernetes.io/rook
+  templates:
+    cluster-name: {{ .Release.Namespace }}
+    fsid: {{ .Values.ceph.fsid }}
+    # Placeholders, like the import script: in external mode Rook never gets
+    # the admin or mon keys, only the restricted user below.
+    admin-secret: admin-secret
+    mon-secret: mon-secret
+    ceph-username: {{ .Values.ceph.user }}
+    ceph-secret: "{% .Secrets.healthchecker_key %}"

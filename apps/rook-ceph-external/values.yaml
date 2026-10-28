@@ -1,0 +1,32 @@
+---
+# Connection to the Ceph cluster, as Rook's import-external-cluster.sh would
+# set it up. Same namespace as the operator (apps/rook-ceph).
+ceph:
+  fsid: af88c536-4b0e-11ee-ad59-67497ccf2e7a
+  # Read-only user with the caps given by create-external-cluster-resources.py.
+  user: client.healthchecker
+  # Mon names as in `ceph mon dump`.
+  monitors:
+    ceph-1: 192.168.14.10:6789
+    ceph-2: 192.168.14.11:6789
+    ceph-3: 192.168.14.12:6789
+
+# Vault fields: "healthchecker_key" (key of ceph.user), "rgw_admin_access_key"
+# and "rgw_admin_secret_key" (RGW user "rgw-admin-ops-user").
+vault:
+  path: apps/rook-ceph
+
+# The cephadm RGW service "rgw.s3", zone "default".
+objectStore:
+  name: s3
+  # Rook advises a single endpoint for ObjectBucketClaims (ideally a load
+  # balancer in front of the RGWs): ceph-1 for now, ceph-2 also serves 7480.
+  endpoint: 192.168.14.10
+  port: 7480
+
+# StorageClass to use in ObjectBucketClaims.
+bucketStorageClass:
+  name: ceph-bucket
+  # Retain: deleting an ObjectBucketClaim (or Argo CD pruning one) keeps the
+  # bucket and its data. Delete would remove them.
+  reclaimPolicy: Retain

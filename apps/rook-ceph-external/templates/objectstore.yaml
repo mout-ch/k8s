@@ -1,0 +1,43 @@
+---
+# The existing RGW. Rook creates buckets and their users through its admin ops
+# API, with the "rgw-admin-ops-user" credentials.
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: rgw-admin-ops-user
+spec:
+  path: {{ .Values.vault.path }}
+  type: kubernetes.io/rook
+  templates:
+    accessKey: "{% .Secrets.rgw_admin_access_key %}"
+    secretKey: "{% .Secrets.rgw_admin_secret_key %}"
+---
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  name: {{ .Values.objectStore.name }}
+spec:
+  gateway:
+    port: {{ .Values.objectStore.port }}
+    externalRgwEndpoints:
+      - ip: {{ .Values.objectStore.endpoint }}
+---
+# Example, in any namespace:
+#   apiVersion: objectbucket.io/v1alpha1
+#   kind: ObjectBucketClaim
+#   metadata:
+#     name: my-app
+#   spec:
+#     generateBucketName: my-app
+#     storageClassName: ceph-bucket
+# Rook then creates a Secret (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY) and a
+# ConfigMap (BUCKET_HOST, BUCKET_PORT, BUCKET_NAME) named like the claim.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.bucketStorageClass.name }}
+provisioner: {{ .Release.Namespace }}.ceph.rook.io/bucket
+reclaimPolicy: {{ .Values.bucketStorageClass.reclaimPolicy }}
+parameters:
+  objectStoreName: {{ .Values.objectStore.name }}
+  objectStoreNamespace: {{ .Release.Namespace }}

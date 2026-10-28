@@ -1,0 +1,40 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rook-ceph
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      # The cephclusters.ceph.rook.io CRD (~320 KB) is too big for client-side apply.
+      - ServerSideApply=true
+  source:
+    path: apps/rook-ceph
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD
+---
+# Needs the CRDs of the rook-ceph Application: sync that one first.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-external
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: rook-ceph
+  project: default
+  source:
+    path: apps/rook-ceph-external
+    repoURL: https://gitlab.com/mout.ch/k8s.git
+    targetRevision: HEAD

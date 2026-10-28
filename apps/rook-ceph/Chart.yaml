@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: rook-ceph
+description: Rook operator for S3 buckets on demand (ObjectBucketClaims) on the external Ceph cluster, without CSI
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: rook-ceph
+    version: v1.21.1
+    repository: https://charts.rook.io/release
