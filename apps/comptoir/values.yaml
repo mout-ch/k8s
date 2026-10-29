@@ -4,7 +4,7 @@
 
 image:
   repository: registry.gitlab.com/kelbert-web-services/comptoir
-  tag: a3a7ae9e
+  tag: 1a2ef763
 
 domain: kgb.kelbert.fr
 
